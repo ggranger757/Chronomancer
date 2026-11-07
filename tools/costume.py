@@ -123,6 +123,23 @@ def calloway(f):
     hands = f.find([H('#fca570'), H('#bd6a62')], f.neck + 4, f.waist + 8)
     if hands:
         hx, hy = max(hands)
+        # the long gun's outline left a black stroke across the coat: long dark horizontal runs with coat above and below
+        for y in range(hy - 8, hy + 4):
+            x = f.ox
+            while x < hx:
+                if dark(f.c(x, y)):
+                    e = x
+                    while e < hx and dark(f.c(e, y)): e += 1
+                    if e - x >= 4:
+                        for xx in range(x, e):
+                            up = next((f.px[xx, yy] for yy in range(y - 1, y - 4, -1) if solid(xx, yy)), None)
+                            dn = next((f.px[xx, yy] for yy in range(y + 1, y + 4) if solid(xx, yy)), None)
+                            if up and dn: f.set(xx, y, up)
+                    x = e
+                else: x += 1
+        for y in range(hy - 8, hy + 9):          # whatever of the long gun still sticks out past the hand goes
+            for x in range(hx + 2, f.ox + f.fw):
+                if f.a(x, y): f.set(x, y, CLEAR)
         f.rect(hx - 1, hy - 3, 9, 4, INK); f.rect(hx, hy - 2, 7, 2, H('#4a4d58')); f.rect(hx, hy - 2, 2, 4, INK); f.set(hx + 3, hy - 2, H('#9aa4b2'))
 
 # ------------------------------------------------------------------ cast
@@ -705,6 +722,54 @@ def bernard_ritual(SQ, J, out):
     return dict(fw=fs, fh=nh, anims={k: dict(r=v['r'], n=v['n'], b=v['b']) for k, v in anims.items()}, scale=1.0, face='left')
 
 
+def chrono_villain(f):
+    """the Chronomancer: the small runaway with the lenses lit cyan; her kunoichi chain is stripped,
+    the gauntlets are tight brass dials, the antenna a short sync spike"""
+    # 1) strip thin structures (chain / whip arc) then keep the largest connected body
+    pts = {(x, y) for y in range(f.oy, f.oy + f.fh) for x in range(f.ox, f.ox + f.fw) if f.a(x, y)}
+    thin = [(x, y) for (x, y) in pts if sum((x + dx, y + dy) in pts for dx in range(-3, 4) for dy in range(-3, 4)) < 17]
+    for q in thin: f.set(*q, CLEAR); pts.discard(q)
+    comps, seen = [], set()
+    for p0 in pts:
+        if p0 in seen: continue
+        st, comp = [p0], []
+        seen.add(p0)
+        while st:
+            x, y = st.pop(); comp.append((x, y))
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    q = (x + dx, y + dy)
+                    if q in pts and q not in seen: seen.add(q); st.append(q)
+        comps.append(comp)
+    if comps:
+        big = max(comps, key=len)
+        for c in comps:
+            if c is not big:
+                for q in c: f.set(*q, CLEAR)
+    f.measure()
+    if not f.ok: return
+    # 2) body + hair + lenses as before, but our own gauntlets/antenna
+    SK = {H(h)[:3] for h in ('#9ccbf0', '#7ab8e8', '#5a90c0', '#4a7ab0')}
+    hem = f.y0 + round(f.ht * .62)
+    for y in range(hem, f.y1 + 1):
+        for x in range(f.ox, f.ox + f.fw):
+            if f.c(x, y) in SK: f.set(x, y, H('#2d3142') if (x + y) % 5 else H('#3a3e47'))
+    hb = skinbox(f, [H('#9ccbf0'), H('#7ab8e8')], f.y0, f.neck + 3)
+    if hb:
+        fx0, fy0, fx1, fy1 = hb
+        f.rect(fx0, fy0 + 3, fx1 - fx0 + 1, 1, H('#40f0ff')); f.set(fx1, fy0 + 3, H('#b8fbff'))   # lit lenses
+        f.set(fx0 - 1, fy0 + 3, H('#40f0ff'))
+        f.rect(fx0 + 1, f.y0 - 3, 1, 3, H('#9aa4b2'), True); f.set(fx0 + 1, f.y0 - 4, H('#40f0ff'))   # short spike
+    hands = f.find([H('#9ccbf0'), H('#7ab8e8'), H('#5a90c0')], f.neck + 6, hem)
+    done = []
+    for (x, y) in sorted(hands, key=lambda p: p[1]):
+        if any(abs(x - a) < 6 and abs(y - b) < 6 for a, b in done): continue
+        done.append((x, y))
+        f.rect(x - 1, y - 3, 4, 4, INK); f.rect(x, y - 2, 2, 2, H('#c8a040')); f.set(x + 1, y - 2, H('#40f0ff'))
+        if len(done) >= 2: break
+
+
+COSTUME.update({'chrono': (chrono_villain, .94, 1.0)})
 COSTUME.update({'jester': (jester3, 1.0, 1.0), 'crew1': (crew3, 1.0, 1.0), 'crew2': (crew3, 1.05, 1.0), 'crew3': (crew3, .98, 1.0), 'marquis': (crew3, 1.22, 1.0),
                 'mina': (mina, .92, 1.0), 'silas26': (silas, 1.0, 1.0), 'silas86': (silas, 1.0, 1.0), 'silas47': (silas, 1.0, 1.0), 'silas88': (silas, 1.0, 1.0)})
 

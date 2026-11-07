@@ -1,7 +1,9 @@
 # Credits
 
 ## Characters
-- Every human character is built on the project owner's **Male / Female 64px Pixel Art Base Templates** and the **Pixel Art Character Template** (shorter characters: Mina, the 1986 kids, young Bernard). They are dressed part by part, with shading, outlines, hair, faces, hats, coats and props, by `tools/dress.py`.
+- **Augie, Jester, the Mantis crew and Calloway** are Step Quest character sheets, recolored and redrawn per frame (`tools/build_sprites.py` + `tools/costume.py`).
+- **The Chronomancer (Mina / Wren)** is built on *The Blind Huntress* and **the Nanomancer** on *Shadeflit*, from **SHADOW Series – The Free Assets**, supplied by the project owner (recolored, with a custom thrust and hurt animation, by `tools/shadow.py`). Check that pack's itch.io page for its license terms before a commercial release.
+- Everyone else is built on the project owner's **Male / Female 64px Pixel Art Base Templates** and the **Pixel Art Character Template** (shorter characters: young Si, the 1986 kids, young Bernard), dressed part by part by `tools/dress.py`.
 - **Bernard** is drawn over the *Hollow King* creature sheet from Step Quest (`tools/costume.py → bernard_ritual`).
 - The **jester mask** is the owner's reference image, recolored blue, red and yellow.
 
@@ -17,4 +19,5 @@
 - The sound effects in `assets/sfx/` were supplied by the project owner for Step Quest. Confirm their license before releasing commercially.
 
 ## Fonts
-- The UI uses the system **Courier New / Courier**. The OFL pixel fonts in `assets/fonts/` remain for reference.
+- Reading text uses the system **Courier New / Courier**.
+- Titles, labels and buttons use **Silkscreen** by Jason Kottke (SIL Open Font License 1.1, license in `assets/fonts/OFL-Silkscreen.txt`).

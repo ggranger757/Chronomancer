@@ -135,7 +135,7 @@ TM.Battle = (() => {
     num(f.x, '-' + d + (o.label ? ' ' + o.label : ''), o.col || (o.label === 'COMBO' ? '#ff4fd8' : '#fff')); TM.W.shake();
     if (run().hero === 'jester') b.rage = Math.min(100, b.rage + 7);
     if (f.big && f.phase === 1 && f.hp < f.max * .55) { f.phase = 2; TM.UI.banner('IT OPENS', 'red'); TM.Audio.play('tear'); }
-    if (b.foe.boss === 'silas' && !f.rewound && f.hp < f.max * .35 && f.hp > 0) { f.rewound = true; f.state = 'rewind'; f.st = 1.2; }
+    if ((b.foe.boss === 'silas' || b.foe.boss === 'wren') && !f.rewound && f.hp < f.max * .35 && f.hp > 0) { f.rewound = true; f.state = 'rewind'; f.st = 1.2; }
     if (f.hp <= 0) win();
     panel();
   }
@@ -162,7 +162,7 @@ TM.Battle = (() => {
     if (f.stun > 0) { f.stun -= dt; f.anim = 'hurt'; return; }
     f.st -= dt;
     const speed = (f.big ? 26 : 42) * (f.phase > 1 ? 1.35 : 1);
-    if (f.state === 'rewind') { if (f.st <= 0) { const hp = Math.round(f.max * .25); f.hp = Math.min(f.max, f.hp + hp); num(f.x, '+' + hp + ' REWIND', '#6df0ff'); TM.Audio.play('portal'); toast('Silas turns his watch back. Your hits un-happen.'); f.state = 'idle'; f.st = .5; panel(); } return; }
+    if (f.state === 'rewind') { if (f.st <= 0) { const hp = Math.round(f.max * .25); f.hp = Math.min(f.max, f.hp + hp); num(f.x, '+' + hp + ' REWIND', '#6df0ff'); TM.Audio.play('portal'); toast(b.foe.boss === 'wren' ? 'Wren turns her wrist. A minute un-happens.' : 'Silas turns his watch back. Your hits un-happen.'); f.state = 'idle'; f.st = .5; panel(); } return; }
     if (f.state === 'idle' || f.state === 'approach') {
       if (!f.move) { const moves = F.moves.filter((m) => !m.rewind); f.move = moves[Math.floor(rnd() * moves.length)]; f.mv = MOVE(f.move, F); }
       const want = (f.mv.range || 40) - 6;
@@ -172,7 +172,7 @@ TM.Battle = (() => {
         f.state = 'wind'; f.st = f.mv.wind * (f.phase > 1 ? .8 : 1); f.feint = rnd() < (F.feint || .25) * .6; f.tell = f.move.tell; f.anim = 'idle';
         if (f.move.k === 'heavy') TM.Audio.play('cast');
       } else { f.anim = 'idle'; f.state = 'idle'; }
-      if (F.boss === 'silas' && rnd() < dt * .12 && f.state !== 'wind') { f.x = Math.max(30, Math.min(W - 30, h.x - h.dir * 40)); b.fx.push({ k: 'door', x: f.x, t: 0 }); TM.Audio.play('portal'); }
+      if (F.boss === 'wren' && rnd() < dt * .16 && f.state !== 'wind') { f.x = Math.max(30, Math.min(W - 30, h.x - h.dir * 40)); b.fx.push({ k: 'door', x: f.x, t: 0 }); TM.Audio.play('portal'); }
       return;
     }
     if (f.state === 'wind') {
@@ -228,7 +228,7 @@ TM.Battle = (() => {
   function win() {
     if (b.over) return; b.over = true; const R = run(), d = b.def, blown = b.thing.blown, bl = b.thing.blend;
     R.wins[b.thing.fight] = true; R.rage = Math.min(60, b.rage); TM.Audio.play('win'); b.f.anim = 'hurt';
-    TM.S.xp(d.boss ? 250 : 45, 'fight won'); if (b.foe.boss === 'silas') TM.S.feat('silas'); if (b.foe.boss === 'bernard') TM.S.feat('boss');
+    TM.S.xp(d.boss ? 250 : 45, 'fight won'); if (b.foe.boss === 'silas') TM.S.feat('silas'); if (b.foe.boss === 'wren') TM.S.feat('wren'); if (b.foe.boss === 'bernard') TM.S.feat('boss');
     toast(d.boss ? `${b.foe.name} falls.` : 'You win.');
     const close = () => { TM.W.state.battle = null; b = null; for (const k in held) held[k] = false; TM.UI.battle(false); TM.Audio.setMood(TM.W.sceneMusic()); };
     setTimeout(() => {

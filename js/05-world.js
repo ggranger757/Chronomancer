@@ -33,6 +33,7 @@ TM.In = (() => {
 TM.W = (() => {
   const U = TM.U, P = TM.PAL || {};
   const GROUND = { c1: 214, c3: 224, c4: 232, lab: 218, ind: 292, bulk: 184, cold: 198, miami: 193, b4: 232, s4n: 250, c2: 220, pine: 268, nfa: 208, gothic: 206, pfor: 234, skyline: 306, neoncity: 206, a3: 308, rn_town86: 230, rn_town47: 230, rn_town88: 230, rn_fields: 230, nn_city: 230, nn_alley: 230 };
+  TM.GROUND = GROUND;
   const TINT = { night: 'rgba(4,6,30,.45)', dark: 'rgba(0,0,0,.55)', neon: 'rgba(28,0,40,.22)', club: 'rgba(38,0,48,.45)', lab: 'rgba(0,18,30,.35)', ritual: 'rgba(48,0,32,.55)', dawn: null, dusk: 'rgba(40,10,40,.25)', noir: 'rgba(0,0,0,.35)', snow: 'rgba(10,16,40,.3)', snowdark: 'rgba(4,8,24,.5)', candle: 'rgba(30,14,0,.5)', between: 'rgba(20,0,40,.5)' };
   let cv, ctx, lc, lx, W = 480, H = 270, imgs = {}, rain = [], snow = [];
   const w = { scene: null, sc: null, cam: 0, t: 0, p: null, fx: [], things: [], battle: null };
@@ -152,6 +153,7 @@ TM.W = (() => {
   function use(t) {
     TM.Audio.play('ui');
     const run = TM.S.run;
+    if (t.type === 'clue' && t.dlg && !TM.S.has(t.clue)) return TM.UI.talk(t.dlg, t);
     if (t.type === 'clue') return TM.UI.clue(t.clue);
     if (t.type === 'npc') {
       const tg = TM.Game.targets().includes(t.id);
@@ -161,7 +163,7 @@ TM.W = (() => {
     if (t.type === 'door') { if (t.to === 'END') { run.flags.END = true; TM.Game.checkSteps(); return; } return TM.UI.fade(() => enter(t.to, w.scene)); }
     if (t.type === 'foe') return TM.Battle.start(t);
     if (t.type === 'hide') { w.p.hidden = !w.p.hidden; w.p.x = t.x; TM.Audio.play('ui'); return; }
-    if (t.type === 'chase') return TM.Chase.start(t.chase || 'tower', (ok) => { if (!ok) return; const th = t.then || {}; if (th.flag) run.flags[th.flag] = true; TM.Game.checkSteps(); TM.S.saveRun(); });
+    if (t.type === 'chase') return TM.Chase.start(t.chase || 'tower', (ok) => { if (!ok) return; const th = t.then || {}; if (th.flag) run.flags[th.flag] = true; if (th.clue) TM.UI.clue(th.clue); else if (th.dlg) TM.UI.talk(th.dlg); TM.Game.checkSteps(); TM.S.saveRun(); });
     if (t.type === 'puzzle') return TM.Puzzle.open(t.puzzle, () => { const th = t.then || {}; run.flags['pz_' + t.puzzle] = true; if (th.flag) run.flags[th.flag] = true; if (th.clue) TM.UI.clue(th.clue); else if (th.dlg) TM.UI.talk(th.dlg); TM.Game.checkSteps(); TM.S.saveRun(); });
   }
 

@@ -5,14 +5,25 @@
    clues, case questions, history checks, chapters, dialogue, files, feats.
    Plain words. *word* = magenta highlight. Text: string or {a:'Augie', j:'Jester'}.
 
-   THE RULES OF TIME (Mina says them out loud in chapter 1 and they never bend):
-   1. TETHER — she can only open an Hour into a moment she is holding a piece of:
-      a stopped watch, a matchbook, a gear. The Hour opens on the day it stopped.
+   THE RULES OF TIME (Mina says the first five out loud in chapter 1; none of them bend):
+   1. TETHER — a door only opens into a moment you hold a piece of: a stopped watch,
+      a matchbook, a gear. It opens on the minute that piece stopped.
    2. FIXED — the past already happened, and if you go there, you were always part
       of it. You can't save anyone back there. You CAN find out what really happened.
-   3. ANCHOR — someone has to stay in the present holding the tether, or the
-      traveler can't come back. That's why only one of you goes.
-   4. DAWN — an Hour closes at the first dawn after you arrive.
+   3. ANCHOR — someone stays in the present holding the tether, or the traveler can't
+      come back. That's why only one of you goes.
+   4. DAWN — a door closes at the first dawn after you arrive.
+   5. ENDS — whatever comes through a door lands at the OPENER's end.
+      (Ivy's body landed in the 2026 attic. Who was in the attic?)
+   6. ONE SELF — nobody can stand in the same minute twice. (Mina never says this one.
+      It's why the Chronomancer couldn't fetch the mainspring herself: she was already
+      in the 1888 tower at 3:07. History says strangers took it. So she waited for you.)
+
+   THE TRUTH: "Mina" is WREN HARTWELL, Bernard's twin. She followed him into the Hour
+   in 1888 and came out with light where her eyes were, unable to age, able to open
+   doors. Every door she opens THROUGH a person pulls a little more of Bernard home.
+   SILAS MORROW has held her doors since he was twelve: "Si" the shoeshine boy (1947),
+   "Eli Ward" the arcade owner (1986), the archivist "Collector" (2026).
    ========================================================================= */
 'use strict';
 window.TM = window.TM || {};
@@ -66,8 +77,10 @@ TM.FOES = {
     moves: [{ k: 'hit', name: 'BRASS KNUCKLES', tell: 'cracks his knuckles' }, { k: 'heavy', name: 'BOTTLE', tell: 'grabs a bottle off the bar', dmg: 19 }, { k: 'guard', name: 'BOB AND WEAVE', tell: 'starts weaving' }] },
   constable: { name: 'CONSTABLE', spr: 'constable', hp: 64, atk: 10, kind: '1888. Doing his rounds in a blizzard.', feint: .2,
     moves: [{ k: 'hit', name: 'TRUNCHEON', tell: 'lifts his truncheon' }, { k: 'heavy', name: 'WHISTLE + CHARGE', tell: 'raises his whistle', dmg: 18 }, { k: 'guard', name: 'BRACE', tell: 'plants his boots in the snow' }] },
-  silas: { name: 'SILAS MORROW', spr: 'silas26', hp: 120, atk: 13, kind: 'Elias Hartwell. 180 years old.', boss: 'silas', feint: .4,
-    moves: [{ k: 'hit', name: 'CANE', tell: 'shifts his grip on the cane' }, { k: 'drain', name: 'BORROWED TIME', tell: 'opens his pocket watch', dmg: 12 }, { k: 'heavy', name: 'THE DOOR', tell: 'draws a circle in the air', dmg: 26 }, { k: 'guard', name: 'REWIND', tell: 'checks the time', rewind: true }] },
+  silas: { name: 'SILAS MORROW', spr: 'silas26', hp: 110, atk: 12, kind: 'Ninety-one. Moving on years she lent him.', boss: 'silas', feint: .4,
+    moves: [{ k: 'hit', name: 'CANE', tell: 'shifts his grip on the cane' }, { k: 'drain', name: 'BORROWED TIME', tell: 'opens his pocket watch', dmg: 12 }, { k: 'heavy', name: 'SHOESHINE', tell: 'swings the iron kit box', dmg: 22 }, { k: 'guard', name: 'REWIND', tell: 'checks the time', rewind: true }] },
+  wren: { name: 'THE CHRONOMANCER', spr: 'chrono', hp: 135, atk: 14, kind: 'Wren Hartwell. Twelve, for 138 years.', boss: 'wren', feint: .5,
+    moves: [{ k: 'hit', name: 'SECOND HAND', tell: 'draws a line of light', dmg: 12 }, { k: 'multi', name: 'SKIPPED MINUTE', tell: 'flickers out of time', hits: 3, dmg: 6 }, { k: 'heavy', name: 'A DOOR THROUGH YOU', tell: 'traces a circle on your chest', dmg: 28 }, { k: 'blind', name: 'THE HOUR', tell: 'her band of light flares' }, { k: 'guard', name: 'REWIND', tell: 'turns her wrist back', rewind: true }] },
   bernard: { name: 'BERNARD', spr: 'bernard', hp: 150, atk: 15, kind: 'What came back.', boss: 'bernard', feint: .45,
     moves: [{ k: 'multi', name: 'TOO MANY HANDS', tell: 'unfolds its arms', hits: 3, dmg: 7 }, { k: 'heavy', name: 'THE STILL HOUR', tell: 'its chest-eyes close', dmg: 30 }, { k: 'drain', name: 'GRIEF', tell: 'whispers your name', dmg: 12 }, { k: 'blind', name: 'STARLIGHT', tell: 'opens where it\'s missing' }] },
 };
@@ -87,31 +100,34 @@ TM.CLUES = {
   mina_rules: { t: 'The Rules of Time', i: '⏳', d: '1 TETHER: Mina can only go to a moment she\'s holding a piece of. 2 FIXED: the past can\'t be changed. 3 ANCHOR: someone stays behind holding the tether. 4 DAWN: the door closes at sunrise.' },
   watches: { t: 'Stolen Watches', i: '⌚', d: 'The Mantis crew has been stealing antique pocket watches for a buyer called "the Collector". Every watch is stopped at 3:07.' },
   // 1986
-  ivy_alive: { t: 'Ivy, Alive', i: '🎧', d: 'You talked to her. She\'s funny and scared. She draws the same thing over and over: something tall with antlers and a face in its chest.' },
-  sketch: { t: 'Ivy\'s Sketchbook', i: '📓', d: 'Pages of the antlered thing. One caption: "HE SAYS HIS NAME IS BERNARD. HE SAYS HE\'S LOST."' },
+  ivy_alive: { t: 'Ivy, Alive', i: '🎧', d: 'You talked to her. She\'s funny and scared. She draws two things over and over: something tall with antlers and a face in its chest — and a little girl who never gets older.' },
+  sketch: { t: 'Ivy\'s Sketchbook', i: '📓', d: 'Pages of the antlered thing: "HE SAYS HIS NAME IS BERNARD. HE SAYS HE\'S LOST." Then a small hooded girl with light over her eyes: "HIS SISTER. SHE\'S IN GRANDMA\'S OLD PHOTOS TOO. SAME AGE."' },
   ray_said: { t: 'Ray\'s Story', i: '💬', d: 'Ivy\'s stepdad Ray says he was home all Halloween night.' },
   bar_tab: { t: 'Bar Tab', i: '🧾', d: 'Lucky\'s Tavern, Oct 31, 1986: R. CALDER, 9:10 PM to 2:45 AM. Ray was at the bar all night.' },
-  arcade_man: { t: 'Mr. Ward', i: '👴', d: 'Eli Ward runs the Starport arcade. Gray beard, walnut cane, burgundy scarf. He hums seven notes while he counts quarters.' },
+  arcade_man: { t: 'Mr. Ward', i: '👴', d: 'Eli Ward runs the Starport arcade. Gray before his time, walks with a cane. Burgundy scarf, gold watch chain. He hums seven notes while he counts quarters.' },
   scar: { t: 'Burned Palm', i: '✋', d: 'When Mr. Ward shook your hand, you felt it: an old round burn scar in the middle of his left palm.' },
-  matchbook: { t: 'Black Orchid Matchbook', i: '🔥', d: 'Dropped by the man who took Ivy: "THE BLACK ORCHID · RAINCASTER". Inside, written in pencil: "Oct 24 1947 — V.L. — 3:07."' },
-  door_seen: { t: 'The Door in the Woods', i: '🌀', d: 'At 3:07 a circle of light opened in the air. A man with a cane walked Ivy through it. You couldn\'t stop it. It already happened.' },
+  matchbook: { t: 'Black Orchid Matchbook', i: '🔥', d: 'Dropped by Eli Ward: "THE BLACK ORCHID · RAINCASTER". Inside, in a child\'s pencil: "Oct 24 1947 — V.L. — 3:07 — I KEEP THE DOOR."' },
+  door_seen: { t: 'The Door in the Woods', i: '🌀', d: 'At 3:07 a circle of light opened in the air. Eli Ward walked Ivy into it. On the other side, holding the door open, stood a small hooded figure with a band of cyan light where her eyes should be.' },
   // 1947
   vera_body: { t: 'Vera Lune', i: '🎤', d: 'The Black Orchid\'s singer. Same round wound. Same stopped watch: 3:07.' },
   vinnie_said: { t: 'Vinnie\'s Story', i: '💬', d: 'Vinnie, who owns the club, says he was "right here at the bar all night".' },
   booking: { t: 'Booking Sheet', i: '📋', d: 'Raincaster PD, Oct 24, 1947, 11:40 PM: Vincent Moretti, held overnight for illegal gambling. Vinnie was in a cell.' },
-  hart: { t: 'Mr. E. Hart', i: '🎩', d: 'A quiet regular who paid for Vera\'s new gown. Gray beard, cane, burgundy scarf, gold watch chain.' },
-  photo47: { t: 'Club Photograph', i: '📷', d: 'A flash photo of the club, Oct 24, 1947. Mr. Hart at a back table. At the edge of the frame: a blurry figure in a 2026 jacket. You.' },
-  ledger: { t: 'Hart\'s Ledger', i: '📒', d: 'A list in brown ink: "B.H. 1888 · R.T. 1912 · V.L. 1947 · I.C. 1986 · M. 2026 — the last door." Each name has a time: 3:07.' },
-  gear: { t: 'Brass Gear', i: '⚙', d: 'In Hart\'s coat: a brass clock gear stamped "HARTWELL CLOCKWORKS · MARCH 12 1888".' },
+  hart: { t: 'Si, the Shoeshine Boy', i: '👞', d: 'Twelve. Flat cap, burgundy scarf, a gold watch chain far too nice for him. Shines shoes by the Orchid\'s back door. Hums seven notes.' },
+  si_burn: { t: 'Si\'s Hand', i: '✋', d: 'After 3:07, Si is crying in the alley, holding his left hand. A fresh round burn in the middle of his palm. He held the door.' },
+  photo47: { t: 'Club Photograph', i: '📷', d: 'A flash photo of the club, Oct 24, 1947. By the back door: Si, and a small hooded girl with light where her eyes should be. At the edge of the frame: a blurry figure in a 2026 jacket. You.' },
+  ledger: { t: 'Si\'s Notebook', i: '📒', d: 'A kid\'s handwriting: "Miss Wren says if I keep the door, Mama gets more time. V.L. 1947 · I.C. 1986 · 2026: THE STRANGERS COME. Then the spring. Then he comes home."' },
+  gear: { t: 'Brass Gear', i: '⚙', d: 'Left on the back seat of the getaway car: a brass clock gear stamped "HARTWELL CLOCKWORKS · MARCH 12 1888". Left for you.' },
   // 1888
-  elias: { t: 'Elias Hartwell', i: '🕰', d: 'Master clockmaker. Gray beard. Burgundy scarf. A walnut cane. He is the same man as Mr. Hart. The same man as Mr. Ward.' },
-  bernard_boy: { t: 'Bernard Hartwell', i: '👦', d: 'Elias\'s son, twelve. Coughing blood. The doctor gives him days.' },
+  elias: { t: 'The Hartwell Portrait', i: '🖼', d: 'ELIAS HARTWELL AND HIS CHILDREN, 1887. The father looks a little like Silas — gray beard, scarf. But the girl. Bernard\'s twin, WREN. You know that face.' },
+  bernard_boy: { t: 'Bernard Hartwell', i: '👦', d: 'Elias\'s son, twelve. Coughing blood. The doctor gives him days. His twin sister Wren won\'t leave the clock tower.' },
   plan: { t: 'Elias\'s Plan', i: '📐', d: 'Drawings of the great clock. A room "between the seconds" where time does not pass — where a dying boy could wait until a cure exists.' },
-  agnes_saw: { t: 'What Agnes Saw', i: '👁', d: 'The maid saw a man appear in the snow "out of nothing" at midnight, holding a little boy\'s hand. The boy looked like Bernard, but wrong.' },
+  agnes_saw: { t: 'What Agnes Saw', i: '👁', d: 'Miss Wren sneaks up the clock tower every night humming the chime. "She says wherever Bernard goes, she goes. She made her father promise."' },
+  wren_out: { t: 'What Came Out', i: '👁', d: 'Two things came back out of the Hour. Something tall wearing Bernard\'s face — and Wren, a band of light where her eyes had been. She is Mina. She has not aged a day since.' },
   mainspring: { t: 'The Mainspring', i: '🌀', d: 'The great clock\'s mainspring. History says it was "lost in the blizzard". It was you. You took it.' },
   // 2026 return
-  palm2026: { t: 'Silas\'s Hand', i: '✋', d: 'Silas wears a glove on his left hand. Always.' },
-  anagram: { t: 'ELIAS → SILAS', i: '🔤', d: 'Same five letters. Elias Hartwell. Eli Ward. E. Hart. Silas Morrow. "Morrow" — tomorrow.' },
+  palm2026: { t: 'Silas\'s Glove', i: '🧤', d: 'A spare glove in Silas\'s desk. The palm lining is scorched in a perfect circle — like Eli Ward\'s scar. Like Si\'s.' },
+  anagram: { t: 'The Shoeshine Kit', i: '👞', d: 'Under the desk: a battered shoeshine kit. Burned into the lid: "SI MORROW · 1947". Inside: a Starport token stamped "E. WARD". Si. Eli. Silas.' },
+  one_self: { t: 'One Minute, One Self', i: '⏳', d: 'Silas\'s notes: "She can\'t go back for the spring. She was already standing in that minute. Nobody stands in the same minute twice. The records say strangers took it. So she waited 138 years for them."' },
 };
 
 /* ------------------------------------------------------------ CASE QUESTIONS · HISTORY CHECKS · KNOWLEDGE CHECKS */
@@ -138,7 +154,7 @@ TM.QUESTIONS = {
     why: 'He lied to hide his drinking, not a murder. The tab clears him.' },
   q_ward: { q: 'Who led Ivy through the door at 3:07?', hint: 'Cane. Scarf. Seven notes.',
     a: [{ t: 'Eli Ward, the arcade owner.', ok: true }, { t: 'Ray Calder.' }, { t: 'Deputy Hollis.' }],
-    why: 'The man in the woods had Ward\'s cane, scarf and song.' },
+    why: 'Ward\'s scarf, chain and song. But he wasn\'t alone — someone held the door open from the other side.' },
   // 1947
   h_robinson: { kind: 'history', era: '1947', q: 'The barkeep says: "Biggest news in baseball this year?"', hint: 'April 1947. Brooklyn.',
     a: [{ t: 'Jackie Robinson playing for the Dodgers.', ok: true }, { t: 'Babe Ruth\'s 60 home runs.' }, { t: 'The first night game.' }],
@@ -149,9 +165,9 @@ TM.QUESTIONS = {
   q_vinnie: { q: 'Did Vinnie kill Vera?', hint: 'Where was he at 3:07?',
     a: [{ t: 'No. He was locked in a police cell from 11:40 PM.', ok: true }, { t: 'Yes. He threatened her last week.' }, { t: 'Yes. It\'s his club.' }],
     why: 'The booking sheet puts him in a cell all night.' },
-  q_same: { q: 'Mr. Ward in 1986. Mr. Hart in 1947. What connects them?', hint: 'Look at what they wear and what they carry.',
-    a: [{ t: 'They\'re the same man — same scarf, chain, cane and the same song, 39 years apart, and he never got older.', ok: true }, { t: 'Father and son.' }, { t: 'Just a coincidence.' }],
-    why: 'He doesn\'t age. The ledger says he\'s been doing this since 1888.' },
+  q_same: { q: 'Eli Ward in 1986. Si the shoeshine boy in 1947. What connects them?', hint: 'Look at their left hands.',
+    a: [{ t: 'Same person, 39 years apart — same scarf, same song, and the round burn Si got holding the door.', ok: true }, { t: 'Father and son.' }, { t: 'Just a coincidence.' }],
+    why: 'Si grew up. He\'s been holding doors for someone his whole life — someone who never got any older.' },
   // 1888
   h_president: { kind: 'history', era: '1888', q: 'The constable squints at you. "Who\'s President, stranger?"', hint: 'March 1888. His first term.',
     a: [{ t: 'Grover Cleveland.', ok: true }, { t: 'Abraham Lincoln.' }, { t: 'Theodore Roosevelt.' }],
@@ -159,16 +175,19 @@ TM.QUESTIONS = {
   h_ripper: { kind: 'history', era: '1888', q: 'Agnes asks if you\'ve heard any news from London. What do you say?', hint: 'It\'s March 1888. The Whitechapel murders start in August.',
     a: [{ t: '"Nothing much, ma\'am."', ok: true }, { t: '"Just Jack the Ripper."' }, { t: '"The Titanic sank."' }],
     why: 'Jack the Ripper\'s killings began in August 1888 — five months from now. The Titanic is 1912.' },
-  q_why: { q: 'Why does Elias kill?', hint: 'Read his plan. Think about his son.',
-    a: [{ t: 'To bring Bernard back. Each "door" through a person takes the years they had left and feeds the boy he lost between seconds.', ok: true }, { t: 'For money.' }, { t: 'Because the cult told him to.' }],
-    why: 'He put his dying son somewhere time doesn\'t pass. What came back wasn\'t his son. He\'s been killing for 138 years trying to bring the rest of him home.' },
+  q_why: { q: 'Why does the Chronomancer kill?', hint: 'What came out of the Hour — and what didn\'t?',
+    a: [{ t: 'To bring Bernard all the way home. Every door she opens through a person pulls a little more of him out.', ok: true }, { t: 'For money.' }, { t: 'Because Elias told her to.' }],
+    why: 'Wren followed her twin into the Hour. Only part of him came back. She\'s spent 138 years pulling the rest through, one life at a time.' },
   // 2026 return
-  q_killer: { q: 'Who is the Collector — the man who killed Ivy, Vera, and Bernard\'s whole life?', hint: 'Who hums the chime? Who wears a glove on his left hand?',
-    a: [{ t: 'Silas Morrow, the archivist. He is Elias Hartwell.', ok: true }, { t: 'Chief Hale.' }, { t: 'Marquis.' }],
-    why: 'Same scarf. Same cane. Same scar. Same song. Elias, Eli, E. Hart, Silas: it was always him.' },
-  q_next: { q: 'The ledger\'s last line: "M. 2026 — the last door." Who is M?', hint: 'Who has he been so kind to?',
-    a: [{ t: 'Mina. He wants a Chronomancer\'s door.', ok: true }, { t: 'Marquis.' }, { t: 'Mrs. Calder.' }],
-    why: 'He helped you because he needed you to bring her to him.' },
+  k_ends: { kind: 'know', q: 'Rule five: whatever comes through a door lands at the OPENER\'s end. Ivy\'s body landed in the 2026 attic. What does that mean?', hint: 'Who was in the attic when you got there?',
+    a: [{ t: 'The Chronomancer was standing in that attic when Ivy came through.', ok: true }, { t: 'Ivy opened the door herself.' }, { t: 'Nothing — doors land anywhere.' }],
+    why: 'Doors drop you at the opener\'s end. The only person in that attic was "Mina".' },
+  q_killer: { q: 'Who is the Chronomancer?', hint: 'The attic. The portrait. The girl in Ivy\'s sketchbook.',
+    a: [{ t: 'Mina. She is Wren Hartwell — Bernard\'s twin.', ok: true }, { t: 'Silas Morrow.' }, { t: 'Elias Hartwell.' }],
+    why: 'Ivy landed where Mina stood. The 1887 portrait has her face. She came out of the Hour in 1888 and never aged.' },
+  q_next: { q: 'Who has been holding her doors?', hint: 'Three names, one burned palm.',
+    a: [{ t: 'Silas Morrow — Si in 1947, Eli Ward in 1986.', ok: true }, { t: 'Chief Hale.' }, { t: 'Marquis.' }],
+    why: 'Same scar, same song, same scarf for 79 years. She promised his mother more time. He\'s been paying ever since.' },
 };
 
 /* ------------------------------------------------------------ PUZZLES (data for 06b-puzzles.js) */
@@ -180,7 +199,7 @@ TM.PUZZLES = {
   hiscore: { type: 'match', title: 'HIGH-SCORE TABLE', how: 'Flip two at a time. Match the initials.', hint: 'Remember where each set flipped.', icons: ['IVY', 'DAN', 'ROS', 'LEO', 'EW_', '307'] },
   chime: { type: 'sequence', title: 'THE SEVEN NOTES', how: 'Listen. Play the chime back.', hint: 'It climbs, drops, and climbs again. Watch which keys light up.', notes: [0, 2, 4, 2, 5, 4, 6] },
   lockbox: { type: 'wheels', title: 'VERA\'S DRESSING ROOM', how: 'Turn the wheels to open her jewelry box.', hint: 'Her mirror: "Opening night — 3rd of the 7th, 1946." Day, month, last digit?', code: '376', clueText: 'Lipstick on the mirror: <b>Opening night 3 · 7 · 46</b>' },
-  safe47: { type: 'keypad', title: 'HART\'S BOOTH', how: 'A locked cigar box. Type the 3-digit code.', hint: 'He does everything at the same minute.', code: '307', clueText: 'Carved into the table: <b>"Always the same minute."</b>' },
+  safe47: { type: 'keypad', title: 'SI\'S SHOESHINE BOX', how: 'A padlocked kit. Type the 3-digit code.', hint: 'Every door opens at the same minute.', code: '307', clueText: 'Scratched on the lid: <b>"Always the same minute."</b>' },
   telegraph: { type: 'cipher', title: 'TELEGRAM', how: 'Turn the decoder ring until the telegram makes sense.', hint: 'The message starts with a word you know: DOOR.', plain: 'DOOR OPENS AT THREE OH SEVEN', shift: 7 },
   clocktower: { type: 'clock', title: 'THE GREAT CLOCK', how: 'Set the clock hands to the minute the first door opened.', hint: 'Every watch you found stopped at the same time.', h: 3, m: 7 },
   gears: { type: 'circuit', title: 'THE ESCAPEMENT', how: 'Turn the gears so the drive reaches the mainspring.', hint: 'Start at the crank and follow one piece at a time.' },
@@ -240,7 +259,7 @@ TM.CHAPTERS = [
       attic: { bg: 'bulk', w: 900, tint: 'dark', start: 60, music: 'horror', things: [
         { id: 'attic_down', type: 'door', x: 30, to: 'hall', label: 'DOWNSTAIRS', back: true },
         { id: 'hour1', type: 'foe', x: 420, foe: 'hourling', fight: 'f_hour1' },
-        { id: 'mina', type: 'npc', x: 700, spr: 'mina', dlg: 'mina1', label: '???', gone: 'mina1' },
+        { id: 'mina', type: 'npc', x: 700, spr: 'chrono', dlg: 'mina1', label: '???', gone: 'mina1' },
         { type: 'glyph', x: 820, y: 60 },
       ] },
     },
@@ -273,7 +292,8 @@ TM.CHAPTERS = [
         { id: 'arcade', type: 'door', x: 640, to: 'arcade', label: 'STARPORT ARCADE' },
         { id: 'deputy', type: 'npc', x: 980, spr: 'deputy', dlg: 'deputy', label: 'TALK' },
         { id: 'to_burbs', type: 'door', x: 1240, to: 'burbs', label: 'CALDER FARM ROAD' },
-        { id: 'to_woods', type: 'door', x: 1460, to: 'woods', label: 'QUARRY WOODS', hidden: 'woods_open' },
+        { id: 'tail', type: 'chase', x: 1380, car: 'sedan', chase: 'quarry86', then: { flag: 'tailed', dlg: 'tailed' }, label: 'FOLLOW WARD', hidden: 'woods_open' },
+        { id: 'to_woods', type: 'door', x: 1460, to: 'woods', label: 'QUARRY WOODS', hidden: 'tailed' },
         { id: 'to_tavern', type: 'door', x: 1120, to: 'tavern', label: 'LUCKY\'S TAVERN', hidden: 'tavern_open' },
         { type: 'glyph', x: 820, y: 70 }, { type: 'med', x: 880 },
       ] },
@@ -300,7 +320,7 @@ TM.CHAPTERS = [
       woods: { bg: 'nfa', w: 1400, tint: 'ritual', start: 60, music: 'horror', things: [
         { id: 'woods_out', type: 'door', x: 30, to: 'main', label: 'TOWN', back: true },
         { id: 'hour2', type: 'foe', x: 520, foe: 'hourling', fight: 'f_hour2' },
-        { id: 'door_seen', type: 'clue', x: 980, clue: 'door_seen', label: 'WATCH' },
+        { id: 'door_seen', type: 'clue', x: 980, clue: 'door_seen', dlg: 'woods307', label: 'WATCH' },
         { id: 'matchbook', type: 'clue', x: 1120, clue: 'matchbook', label: 'SOMETHING IN THE MUD', hidden: 'saw_door' },
         { type: 'glyph', x: 760, y: 80 },
       ] },
@@ -318,7 +338,8 @@ TM.CHAPTERS = [
       { text: 'Talk to Ray again — catch the lie', need: { flag: 'ray_broke' }, target: 'ray' },
       { text: 'SOLVE: Could Ray have done it?', need: { q: 'q_ray' } },
       { text: 'Find the kids\' channel on the walkie', need: { flag: 'woods_open' }, target: 'walkie' },
-      { text: 'Get to the quarry woods before 3:07', need: { flag: 'seen_woods' }, target: 'to_woods' },
+      { text: 'Ward\'s wagon just pulled out with Ivy in it. FOLLOW IT.', need: { flag: 'tailed' }, target: 'tail' },
+      { text: 'Into the quarry woods before 3:07', need: { flag: 'seen_woods' }, target: 'to_woods' },
       { text: 'Get through the woods', need: { fight: 'f_hour2' }, target: 'hour2' },
       { text: '3:07 AM', need: { clue: 'door_seen' }, target: 'door_seen' },
       { text: 'He dropped something', need: { clue: 'matchbook' }, target: 'matchbook' },
@@ -333,6 +354,7 @@ TM.CHAPTERS = [
         { id: 'goon1', type: 'foe', x: 760, foe: 'goon', fight: 'f_goon' },
         { id: 'club', type: 'door', x: 1000, to: 'club', label: 'THE BLACK ORCHID' },
         { id: 'to_pd', type: 'door', x: 1360, to: 'precinct', label: 'POLICE PRECINCT' },
+        { id: 'getaway', type: 'chase', x: 1180, car: 'c47', chase: 'getaway47', then: { flag: 'chased47', clue: 'gear' }, label: 'CHASE THE CAR', hidden: 'si_seen' },
         { type: 'glyph', x: 560, y: 70 }, { type: 'med', x: 1200 },
       ] },
       club: { bg: 'c3', w: 1300, tint: 'club', start: 60, music: 'swing47', things: [
@@ -340,8 +362,9 @@ TM.CHAPTERS = [
         { id: 'barkeep', type: 'npc', x: 260, spr: 'barkeep', dlg: 'barkeep', label: 'TALK' },
         { id: 'vinnie', type: 'npc', x: 520, spr: 'vinnie', dlg: 'vinnie', label: 'TALK' },
         { id: 'vera', type: 'npc', x: 760, spr: 'vera', dlg: 'vera', label: 'TALK', hidden: 'vera_alive', gone: 'vera_dead' },
-        { id: 'hart', type: 'npc', x: 1000, spr: 'silas47', dlg: 'hart', label: 'TALK', hidden: 'vera_talked', gone: 'hart_left' },
-        { id: 'safe47', type: 'puzzle', puzzle: 'safe47', x: 1100, icon: '🗃', then: { clue: 'ledger' }, label: 'HART\'S BOOTH', hidden: 'hart_left' },
+        { id: 'hart', type: 'npc', x: 1060, spr: 'silaskid', dlg: 'hart', label: 'TALK', hidden: 'vera_talked', gone: 'vera_dead' },
+        { id: 'siburn', type: 'clue', x: 1060, clue: 'si_burn', label: 'THE BACK DOOR', hidden: 'vera_dead' },
+        { id: 'safe47', type: 'puzzle', puzzle: 'safe47', x: 1140, icon: '👞', then: { clue: 'ledger' }, label: 'SHOESHINE BOX', hidden: 'chased47' },
         { id: 'dressing', type: 'door', x: 1250, to: 'dressing', label: 'BACKSTAGE' },
         { type: 'glyph', x: 900, y: 60 },
       ] },
@@ -363,15 +386,17 @@ TM.CHAPTERS = [
       { text: 'Blend in at the bar', need: { flag: 'barkeep' }, target: 'barkeep' },
       { text: 'Talk to Vera Lune before her last song', need: { flag: 'vera_talked' }, target: 'vera' },
       { text: 'Talk to Vinnie, the owner', need: { clue: 'vinnie_said' }, target: 'vinnie' },
-      { text: 'Meet the quiet man in the back booth', need: { clue: 'hart' }, target: 'hart' },
+      { text: 'Who\'s the kid shining shoes by the back door?', need: { clue: 'hart' }, target: 'hart' },
       { text: '3:07 AM. Backstage.', need: { clue: 'vera_body' }, target: 'vera_body' },
+      { text: 'Check the back door', need: { clue: 'si_burn' }, target: 'siburn' },
+      { text: 'A black car is pulling away from the alley. CHASE IT with Calloway.', need: { flag: 'chased47' }, target: 'getaway' },
       { text: 'Open Vera\'s jewelry box', need: { clue: 'photo47' }, target: 'lockbox' },
       { text: 'Check the booking desk at the precinct', need: { clue: 'booking' }, target: 'booking' },
       { text: 'Decode the telegram on the desk', need: { flag: 'telegram' }, target: 'telegraph' },
       { text: 'Talk to Vinnie again — catch the lie', need: { flag: 'vinnie_broke' }, target: 'vinnie' },
       { text: 'SOLVE: Did Vinnie do it?', need: { q: 'q_vinnie' } },
-      { text: 'Open Hart\'s cigar box', need: { clue: 'ledger' }, target: 'safe47' },
-      { text: 'SOLVE: Who is Mr. Hart?', need: { q: 'q_same' } },
+      { text: 'Open Si\'s shoeshine box', need: { clue: 'ledger' }, target: 'safe47' },
+      { text: 'SOLVE: Who is Si?', need: { q: 'q_same' } },
     ] },
 
   { id: 'ch4', n: 4, era: '1888', title: 'THE GREAT BLIZZARD', mood: 'March 12, 1888. Three feet of snow and still falling.', music: 'box1888', intro: 'intro4', outro: 'outro4',
@@ -425,25 +450,26 @@ TM.CHAPTERS = [
       { text: 'Fix the escapement', need: { flag: 'gears' }, target: 'gears' },
       { text: 'Climb the tower', need: { flag: 'seen_tower' }, target: 'tower' },
       { text: 'Set the great clock to the first minute', need: { flag: 'first_door' }, target: 'clocktower' },
-      { text: 'Take the mainspring', need: { clue: 'mainspring' }, target: 'mainspring' },
+      { text: 'Take the mainspring (history says a stranger did)', need: { clue: 'mainspring' }, target: 'mainspring' },
       { text: 'SOLVE: Why does Elias kill?', need: { q: 'q_why' } },
     ] },
 
   { id: 'ch5', n: 5, era: '2026', title: 'THE HOUR BETWEEN', mood: 'November 7, 2026. The clock tower comes down at dawn.', music: 'present', intro: 'intro5',
     scenes: {
-      society2: { bg: 'cold', w: 1000, tint: 'dark', start: 60, music: 'chime', things: [
+      society2: { bg: 'cold', w: 1100, tint: 'dark', start: 60, music: 'chime', things: [
         { id: 'to_street5', type: 'door', x: 40, to: 'street5', label: 'STREET', back: true },
         { id: 'partner5', type: 'npc', x: 220, spr: 'PARTNER', dlg: 'partner5', label: 'TALK' },
-        { id: 'glove', type: 'clue', x: 420, clue: 'palm2026', label: 'SILAS\'S DESK' },
-        { id: 'anagram', type: 'clue', x: 600, clue: 'anagram', label: 'NAMEPLATE' },
-        { id: 'torn', type: 'puzzle', puzzle: 'torn', x: 760, icon: '📄', then: { flag: 'drawing' }, label: 'TORN DRAWING' },
-        { id: 'chime_box', type: 'puzzle', puzzle: 'chime', x: 900, icon: '🎵', then: { flag: 'tower_open' }, label: 'MUSIC BOX' },
+        { id: 'glove', type: 'clue', x: 400, clue: 'palm2026', label: 'SILAS\'S DESK' },
+        { id: 'anagram', type: 'clue', x: 540, clue: 'anagram', label: 'UNDER THE DESK' },
+        { id: 'notes', type: 'clue', x: 640, clue: 'one_self', label: 'SILAS\'S NOTES' },
+        { id: 'torn', type: 'puzzle', puzzle: 'torn', x: 820, icon: '📄', then: { flag: 'drawing' }, label: 'TORN DRAWING' },
+        { id: 'chime_box', type: 'puzzle', puzzle: 'chime', x: 1000, icon: '🎵', then: { flag: 'tower_open' }, label: 'MUSIC BOX' },
       ] },
       street5: { bg: 'nn_city', w: 1200, tint: 'neon', rain: true, start: 60, music: 'boombap', things: [
         { id: 'marquis5', type: 'npc', x: 460, spr: 'marquis', dlg: 'marquis5', label: 'TALK' },
         { id: 'ruth', type: 'npc', x: 820, spr: 'ruth', dlg: 'ruth', label: 'TALK' },
         { id: 's5_soc', type: 'door', x: 40, to: 'society2', label: 'HISTORICAL SOCIETY', back: true },
-        { id: 'drive', type: 'chase', x: 1000, car: 'hatch', chase: 'tower', then: { flag: 'arrived' }, label: 'DRIVE', hidden: 'tower_open' },
+        { id: 'drive', type: 'chase', x: 1000, car: 'hatch', chase: 'tower', then: { flag: 'arrived', dlg: 'arrived' }, label: 'CHASE SILAS', hidden: 'tower_open' },
         { id: 'to_tower', type: 'door', x: 1150, to: 'tower26', label: 'THE CLOCKWORKS TOWER', hidden: 'arrived' },
       ] },
       tower26: { bg: 'lab', w: 900, tint: 'ritual', start: 60, music: 'boss', things: [
@@ -453,26 +479,30 @@ TM.CHAPTERS = [
         { id: 'hourdoor', type: 'door', x: 860, to: 'between', label: 'THE HOUR BETWEEN', hidden: 'silas_beaten' },
       ] },
       between: { bg: 's4n', w: 1000, tint: 'between', start: 60, music: 'boss', things: [
-        { id: 'mina_bound', type: 'npc', x: 300, spr: 'mina', dlg: 'mina_bound', label: 'MINA!', gone: 'mina_freed' },
-        { id: 'bernard', type: 'foe', x: 700, foe: 'bernard', fight: 'f_bernard', hidden: 'mina_freed' },
+        { id: 'wren', type: 'npc', x: 420, spr: 'chrono', dlg: 'wren_final', label: 'WREN', gone: 'wren_fight' },
+        { id: 'wren_boss', type: 'foe', x: 560, foe: 'wren', fight: 'f_wren', hidden: 'wren_fight' },
+        { id: 'bernard', type: 'foe', x: 760, foe: 'bernard', fight: 'f_bernard', hidden: 'wren_beaten' },
       ] },
     },
     steps: [
-      { text: 'Mina is gone. Find your partner.', need: { flag: 'partner5' }, target: 'partner5' },
+      { text: 'Mina took the spring. Find your partner.', need: { flag: 'partner5' }, target: 'partner5' },
+      { text: 'KNOWLEDGE CHECK: where do doors land?', need: { q: 'k_ends' } },
+      { text: 'SOLVE: Who is the Chronomancer?', need: { q: 'q_killer' } },
       { text: 'Search Silas\'s desk', need: { clue: 'palm2026' }, target: 'glove' },
-      { text: 'Look at his nameplate', need: { clue: 'anagram' }, target: 'anagram' },
-      { text: 'SOLVE: Who is the Collector?', need: { q: 'q_killer' } },
+      { text: 'Look under the desk', need: { clue: 'anagram' }, target: 'anagram' },
+      { text: 'Read Silas\'s notes', need: { clue: 'one_self' }, target: 'notes' },
+      { text: 'SOLVE: Who has been helping her?', need: { q: 'q_next' } },
       { text: 'Fix Ivy\'s last drawing', need: { flag: 'drawing' }, target: 'torn' },
-      { text: 'SOLVE: Who is the last door for?', need: { q: 'q_next' } },
       { text: { a: 'Ask Ivy\'s mother for help', j: 'Get the crew — and tell Ivy\'s mother' }, need: { flag: 'ruth' }, target: 'ruth' },
       { text: 'Settle it with Marquis', need: { flag: 'marquis5' }, target: 'marquis5', only: 'jester' },
       { text: 'Play the seven notes — they\'re the tower\'s lock', need: { flag: 'tower_open' }, target: 'chime_box' },
-      { text: 'Race across town to the Clockworks before 3:07', need: { flag: 'arrived' }, target: 'drive' },
+      { text: 'Silas is driving her to the Clockworks. CATCH HIM before 3:07', need: { flag: 'arrived' }, target: 'drive' },
       { text: 'Climb the tower', need: { flag: 'seen_tower26' }, target: 'to_tower' },
       { text: 'Confront Silas', need: { flag: 'silas_fight' }, target: 'silas_final' },
-      { text: 'STOP HIM', need: { fight: 'f_silas' }, target: 'silas_boss' },
+      { text: 'Get past him', need: { fight: 'f_silas' }, target: 'silas_boss' },
       { text: 'Go through the door', need: { flag: 'seen_between' }, target: 'hourdoor' },
-      { text: 'Free Mina', need: { flag: 'mina_freed' }, target: 'mina_bound' },
+      { text: 'Face Wren', need: { flag: 'wren_fight' }, target: 'wren' },
+      { text: 'STOP THE CHRONOMANCER', need: { fight: 'f_wren' }, target: 'wren_boss' },
       { text: 'BERNARD', need: { fight: 'f_bernard' }, target: 'bernard' },
     ] },
 
@@ -480,38 +510,54 @@ TM.CHAPTERS = [
     scenes: {
       dawn: { bg: 'skyline', w: 900, tint: 'dawn', start: 60, music: 'calm', things: [
         { id: 'ruth6', type: 'npc', x: 300, spr: 'ruth', dlg: 'ruth6', label: 'TALK' },
-        { id: 'mina6', type: 'npc', x: 560, spr: 'mina', dlg: 'mina6', label: 'TALK' },
+        { id: 'mina6', type: 'npc', x: 560, spr: 'marquis', dlg: 'mina6', label: 'TALK' },
         { id: 'partner6', type: 'npc', x: 760, spr: 'PARTNER', dlg: 'partner6', label: 'TALK' },
       ] },
     },
     steps: [
       { text: 'Talk to Mrs. Calder', need: { flag: 'ruth6' }, target: 'ruth6' },
-      { text: 'Talk to Mina', need: { flag: 'mina6' }, target: 'mina6' },
+      { text: { a: 'Talk to Marquis', j: 'Face Marquis' }, need: { flag: 'mina6' }, target: 'mina6' },
       { text: 'Walk to your partner', need: { flag: 'case_done' }, target: 'partner6' },
     ] },
 ];
+/* ------------------------------------------------------------ CAR CHASES (06d-chase.js)
+   target: a car to CATCH (pursuit). No target: reach the finish before the clock runs out. */
+TM.CHASES = {
+  quarry86: { era: '1986', bg: 'rn_town86', car: 'sedan', target: 'wagon', traffic: ['hatch', 'sedan', 'cruiser86', 'wagon'], cop: 'cruiser86', cops: 1, rain: false, leaves: true,
+    from: 171, to: 187, secs: 70, music: 'hyper86', finish: 'WARD\'S WAGON', msg: 'Ray\'s pickup. Ward\'s wagon. Don\'t lose him!', copMsg: 'Deputy Hollis is on your tail!',
+    winT: 'THE QUARRY GATE', win: 'You stay on Ward\'s bumper all the way to the quarry.', loseT: 'YOU LOST HIM', lose: 'The wagon\'s taillights vanish into the dark.' },
+  getaway47: { era: '1947', bg: 'rn_town47', car: 'c47', target: 'limo', traffic: ['c47', 'taxi', 'c47', 'sedan'], cops: 0, rain: true,
+    from: 189, to: 205, secs: 70, music: 'noir47', finish: 'THE BLACK CAR', msg: 'Calloway\'s cruiser. The black car from the alley. GO.',
+    winT: 'RUN OFF THE ROAD', win: 'You force the black car into a lamppost by the river. The driver is a stranger paid in cash. The back seat is empty except for one thing.', loseT: 'GONE', lose: 'The black car turns onto the bridge and disappears in the rain.' },
+  tower: { era: '2026', bg: 'nn_city', car: 'hatch', target: 'sedan', cops: 2, rain: true, from: 164, to: 187, secs: 82, finish: 'SILAS\'S CAR',
+    msg: 'Ruth\'s car. Silas has a head start. Catch him before 3:07!', winT: 'CAUGHT HIM', win: 'You ram Silas\'s car into the Clockworks fence.', loseT: 'TOO LATE', lose: 'Silas\'s taillights cross the bridge without you.' },
+};
+
 // story hooks: finding a clue / solving a question can open new things
-TM.ONCLUE = { poster: ['need_file'], door_seen: ['saw_door'], vera_body: [], sketch: [] };
+TM.ONCLUE = { poster: ['need_file'], door_seen: ['saw_door'], si_burn: ['si_seen'], vera_body: [], sketch: [] };
 TM.ONSOLVE = {};
 // Mina is at the Society once you've met her (chapter 1)
-TM.CHAPTERS[0].scenes.society.things.push({ id: 'mina_soc', type: 'npc', x: 470, spr: 'mina', dlg: 'rules', label: 'TALK', hidden: 'mina1' });
+TM.CHAPTERS[0].scenes.society.things.push({ id: 'mina_soc', type: 'npc', x: 470, spr: 'chrono', dlg: 'rules', label: 'TALK', hidden: 'mina1' });
 
 /* ------------------------------------------------------------ WHO */
 TM.WHO = {
   augie: 'AUGIE', jester: 'JESTER', narr: '', card: '', radio: 'SCANNER',
-  mina: 'MINA', silas26: 'SILAS MORROW', silas86: 'ELI WARD', silas47: 'MR. HART', silas88: 'ELIAS HARTWELL',
+  mina: 'MINA', chrono: 'MINA', wren: 'WREN HARTWELL', silas26: 'SILAS MORROW', silas86: 'ELI WARD', silaskid: 'SI', silas88: 'ELIAS HARTWELL',
   crew1: 'RICO (MANTIS)', crew2: 'DRE (MANTIS)', crew3: 'GHOST (MANTIS)', marquis: 'MARQUIS', seung: 'SEUNG LEE', hale: 'CHIEF HALE', ruth: 'RUTH CALDER',
   ivy: 'IVY CALDER', rosa: 'ROSA', danny: 'DANNY', leon: 'LEON', ray: 'RAY CALDER', deputy: 'DEPUTY HOLLIS',
   calloway: 'DET. JACK CALLOWAY', vinnie: 'VINNIE MORETTI', vera: 'VERA LUNE', barkeep: 'SAL', goon: 'DOORMAN',
   agnes: 'AGNES', foreman: 'MR. PIKE', constable: 'CONSTABLE', bernboy: 'BERNARD', bernard: 'BERNARD',
 };
 
+// speakers drawn with another speaker's sprite
+TM.WHOSPR = { mina: 'chrono', wren: 'chrono' };
+
 /* ------------------------------------------------------------ DIALOGUE
    node: {who, text, next | choices:[{t, do, go, say}] | lie:{proof, choices, ok}, do:[...], tell, if}
    acts: clue:x  flag:x  xp:n  cover:-1  blend:-1  ach:x  q:id (opens a check) */
 TM.DLG = {
   intro1: [
-    { who: 'card', text: 'RAINCASTER, MARYLAND\nNOVEMBER 6, 2026 · 11:48 PM' },
+    { who: 'card', cut: 'cold_open', text: 'RAINCASTER, MARYLAND\nNOVEMBER 6, 2026 · 11:48 PM' },
     { who: 'narr', text: { a: 'You are AUGIE. When you were nine, you escaped the Children of Zyxth — a cult of masked technomancers. You built everything you own from scrap. Your two box-droids, GOLEM I and II, roll along behind you.', j: 'You are JESTER. Four years undercover inside the Mantis crew. Nobody in the crew knows you\'re a cop. Tonight the scanner says a girl was found dead in the Hartwell mansion — with a hole through her that no weapon makes.' } },
     { who: 'narr', text: 'You\'re UNDERCOVER. The *COVER* meter is top-right. Talk like a gangster around the crew, not like a cop. If your cover runs out, they attack.', if: { hero: 'jester' } },
     { who: 'narr', text: 'Walk with ◀ ▶. Press ACTION to look, talk, and go. The *pink arrow* shows your next move. Take your time — nothing here is on a clock. Yet.' },
@@ -544,32 +590,34 @@ TM.DLG = {
     { who: 'hale', text: 'Go home. Raincaster doesn\'t need ghost stories.' },
   ],
   mina1: [
-    { who: 'narr', text: 'A kid. Maybe thirteen. Her face is *pale blue* — a technomancer\'s mask is sealed on. Clock dials glow on both her wrists.' },
-    { who: 'player', text: { a: 'Your face... you\'re from the Children. Zyxth. I know that mask. I wore one.', j: 'Hey. Hey, I\'m not gonna hurt you. What are you doing up here?' } },
-    { who: 'mina', text: 'I felt her come through. An Hour opened downstairs at 3:07 — from a long time ago. And then she... she was already hurt.' },
-    { who: 'mina', text: 'I\'m Mina. I\'m a Chronomancer. I ran away from them tonight. They\'ll come for me. Please don\'t give me back.' },
+    { who: 'narr', text: 'A kid. Maybe twelve. Hood up. Where her eyes should be, a band of *cyan light* — like a strip of sky. Little brass dials tick on her wrists.' },
+    { who: 'player', text: { a: 'That light... is that Children tech? Zyxth? I wore their mask once.', j: 'Hey. Hey, I\'m not gonna hurt you. What are you doing up here?' } },
+    { who: 'mina', text: 'I felt her come through. A door opened down there at seven past eleven — from a long time ago. She was already hurt.' },
+    { who: 'mina', text: 'I\'m Mina. I can open doors in time. People want me for it. I ran. Please don\'t give me back.' },
+    { who: 'narr', text: { a: 'Your Golem scans her gauntlets. No Zyxth signature. Just brass. Very old brass.', j: 'She says it all without a single "um". Like she\'s said it before.' } },
     { who: 'player', text: { a: 'Nobody\'s giving you back. Golem — fortress mode. She\'s with us.', j: 'Nobody\'s giving anybody back. Come on. I know a guy who knows old things.' } },
-    { who: 'narr', text: 'Downstairs, the police are carrying the girl out. Her watch is in your pocket.', do: ['flag:mina1', 'flag:need_archive'] },
+    { who: 'narr', text: 'Downstairs, the police are carrying the girl out. Her watch is in your pocket. Mina is humming something. Seven notes.', do: ['flag:mina1', 'flag:need_archive'] },
   ],
   silas1: [
     { who: 'silas26', text: 'Visitors at midnight. And a little one. Silas Morrow — I keep Raincaster\'s memories. Come in out of the rain.' },
-    { who: 'narr', text: 'He walks with a walnut cane. A burgundy scarf. A gold watch chain. A glove on one hand.' },
+    { who: 'narr', text: 'Ninety-one, and he moves like sixty. A burgundy scarf. A gold watch chain. A glove on his left hand. He doesn\'t ask the girl a single question.' },
     { who: 'silas26', text: 'A girl in a teal windbreaker? Oh... oh, dear. There\'s a drawer you should see.', do: ['flag:silas1', 'flag:need_archive'] },
-    { who: 'silas26', text: 'Our tower clock plays the Hartwell Chime every hour. Seven notes. Built in 1888. They\'re tearing the tower down at dawn tomorrow. Progress.' },
+    { who: 'silas26', text: 'Our tower clock plays the Hartwell Chime every hour. Seven notes, since 1888. They tear the tower down at dawn tomorrow. Progress.' },
   ],
   rules: [
     { who: 'mina', text: 'Okay. Listen, because these don\'t bend.' },
-    { who: 'mina', text: 'ONE. I can only open an Hour into a moment I\'m holding a piece of. Her watch stopped on October 31, 1986. So that\'s where it goes.' },
-    { who: 'mina', text: 'TWO. What happened, happened. If you go back, you were always there. You can\'t save her. I\'m sorry. But you can SEE.' },
-    { who: 'mina', text: 'THREE. Someone stays here holding the tether, or the traveler can\'t get back. FOUR. The Hour closes at dawn.' },
+    { who: 'mina', text: 'ONE. A door only opens into a moment you\'re holding a piece of. Her watch stopped at 3:07 on October 31, 1986. So that\'s where it goes.' },
+    { who: 'mina', text: 'TWO. What happened, happened. If you go back, you were always there. You can\'t save her. But you can SEE.' },
+    { who: 'mina', text: 'THREE. Someone stays here holding the tether, or the traveler can\'t get back. FOUR. The door closes at dawn.' },
+    { who: 'mina', text: 'FIVE. Whatever comes through a door lands at the end of whoever opened it. That\'s how I bring you home: you come back to me.' },
     { who: 'player', text: { a: 'Then I go. Jester holds the watch.', j: 'Then I go. Augie holds the watch.' } },
-    { who: 'narr', text: 'Silas watches you from the doorway. He is humming seven notes.', do: ['flag:rules', 'clue:mina_rules'] },
+    { who: 'narr', text: 'Silas watches from the doorway. He and Mina hum the same seven notes, at the same time, without looking at each other.', do: ['flag:rules', 'clue:mina_rules'] },
   ],
   outro1: [
-    { who: 'card', text: 'Mina twists the dials on her wrists.\nThe air tears open like wet paper.\n\nOn the other side, someone is playing a synth.' },
+    { who: 'card', cut: 'first_jump', text: 'Mina twists the dials on her wrists.\nThe air tears open like wet paper.\n\nOn the other side, someone is playing a synth.' },
   ],
-
   intro2: [
+    { who: 'card', text: 'THE STORY SO FAR\n\nA girl who vanished in 1986 was found dead tonight — still 16.\nA runaway named Mina can open doors in time.\nHer watch stopped at 3:07, Oct 31, 1986. That\'s where you\'re going.' },
     { who: 'card', text: 'OCTOBER 31, 1986 · 7:40 PM\nRAINCASTER, MARYLAND' },
     { who: 'narr', text: 'You\'re a stranger in 1986. People will test you. Say something from the future and they get suspicious — watch your *BLEND* meter. Lose it and the deputy comes for you.' },
     { who: 'narr', text: 'Ivy vanishes at 3:07 AM. You can\'t stop it. Find out who.' },
@@ -589,11 +637,12 @@ TM.DLG = {
   ivy: [
     { who: 'narr', text: 'You know how this night ends. She doesn\'t.' },
     { who: 'ivy', text: 'Hi? You\'re staring. Do I have paint on my face again?' },
-    { who: 'ivy', text: 'You want to see something weird? Nobody believes me. There\'s a man made of antlers and hands and he says his name is Bernard. He says he\'s lost. He\'s not scary. He\'s sad.' },
+    { who: 'ivy', text: 'You want to see something weird? There\'s a man made of antlers and hands and he says his name is Bernard. He says he\'s lost. He\'s not scary. He\'s sad.' },
+    { who: 'ivy', text: 'And there\'s a girl. Little. Light where her eyes go. She says she\'s his sister and she\'s bringing him home. She\'s in my grandma\'s photos from 1947. Same age. Same hood.' },
     { who: 'ivy', text: 'Oh — what year do you think the world ends? Rosa says 2000. Computers or something.', choices: [
       { t: '"Nothing happens in 2000. I promise."', do: ['xp:20'] },
       { t: '"Ask me in 2026."', do: ['blend:-1'], say: ['ivy', '...Okay, weirdo. That\'s like a thousand years from now.'] }] },
-    { who: 'ivy', text: 'I\'m meeting the Static Kids later. Here — look at my sketchbook. Tell me I\'m not crazy.', do: ['clue:ivy_alive', 'flag:ivy_talked'] },
+    { who: 'ivy', text: 'Mr. Ward\'s driving us to the quarry later. Here — look at my sketchbook. Tell me I\'m not crazy.', do: ['clue:ivy_alive', 'flag:ivy_talked'] },
   ],
   ray: [
     { who: 'ray', text: 'You lost? This is my property.', if: { nclue: 'ray_said' } },
@@ -616,10 +665,10 @@ TM.DLG = {
   ],
   ward: [
     { who: 'silas86', text: 'Tokens are four for a dollar, friend. Eli Ward. I run this little spaceport.' },
-    { who: 'narr', text: 'Gray beard. Walnut cane with a silver knob. A burgundy scarf. A gold watch chain. You\'ve seen all of these tonight — forty years from now.', do: ['clue:arcade_man'] },
-    { who: 'silas86', text: 'Ivy? Remarkable girl. She sees things the rest of us have forgotten how to see.' },
+    { who: 'narr', text: 'Gray before his time — can\'t be much past fifty. Burgundy scarf. Gold watch chain. You saw that scarf and that chain tonight — on a ninety-one-year-old man, forty years from now.', do: ['clue:arcade_man'] },
+    { who: 'silas86', text: 'Ivy? Remarkable girl. She sees things the rest of us have forgotten how to see. I\'m giving the kids a ride out to the quarry tonight.' },
     { who: 'narr', text: 'He offers his hand. You shake it. Your thumb finds a round, hard scar in the middle of his palm.', do: ['clue:scar'] },
-    { who: 'silas86', text: 'Ha. Old burn. A clock spring snapped when I was young. Very, very young.' },
+    { who: 'silas86', text: 'Ha. Old burn. I held a door I shouldn\'t have. I was twelve.' },
   ],
   deputy: [
     { who: 'deputy', text: 'Evening. Halloween\'s for kids. You\'re not a kid.' },
@@ -629,23 +678,34 @@ TM.DLG = {
       { t: '"Nothing, officer."' }] },
     { who: 'narr', text: 'He files it. In forty years you\'ll read it in a drawer. It already happened.', if: { flag: 'tip' }, do: ['flag:tavern_open'] },
   ],
+  tailed: [
+    { who: 'narr', text: 'Ward\'s wagon is parked crooked at the quarry gate, doors open, engine ticking. Footprints — his, and Ivy\'s sneakers — lead into the trees.' },
+    { who: 'narr', text: 'You were close enough to see her face in the back window. She was laughing. She thought it was an adventure.' },
+  ],
+  woods307: [
+    { who: 'narr', cut: 'woods307', text: '3:07 AM. The air in the clearing folds open into a circle of light.' },
+    { who: 'narr', text: 'Eli Ward walks Ivy to the edge of it. On the far side, holding the door open from somewhere else entirely, stands a small hooded figure with a band of cyan light where her eyes should be.' },
+    { who: 'player', text: 'That light where her eyes should be... No. Mina\'s forty years away, holding the door for ME. ...Isn\'t she?' },
+    { who: 'narr', text: 'Ivy steps through. The circle snaps shut. Ward stands alone in the dark, holding his left hand, crying. Something falls out of his coat into the mud.', do: ['clue:door_seen'] },
+  ],
   outro2: [
-    { who: 'card', text: 'The Hour closes at dawn.\nYou land back in 2026 on the floor of the Historical Society, holding a matchbook from 1947.' },
-    { who: 'mina', text: 'You were gone four hours. For me it was a minute. Did you see her?' },
-    { who: 'player', text: 'I saw who took her. And he was here tonight. Wasn\'t he.' },
+    { who: 'card', text: 'The door closes at dawn.\nYou land back in 2026 — at Mina\'s feet on the Historical Society floor — holding a matchbook from 1947.' },
+    { who: 'mina', text: 'You were gone four hours. For me it was a minute. Did you see who took her?' },
+    { who: 'player', text: 'Eli Ward. And someone small holding the door from the other side.' },
+    { who: 'mina', text: '...Then we follow the matchbook. 1947. Hold it tight.' },
     { who: 'narr', text: 'Silas\'s office door is closed. Behind it, someone is humming.' },
   ],
-
   intro3: [
+    { who: 'card', text: 'THE STORY SO FAR\n\nEli Ward walked Ivy into a door of light at 3:07.\nSomeone small held it open from the other side.\nWard dropped a matchbook: The Black Orchid, 1947.' },
     { who: 'card', text: 'OCTOBER 24, 1947 · 10:15 PM\nTHE BLACK ORCHID CLUB' },
-    { who: 'narr', text: 'Vera Lune sings her last song tonight. The matchbook says 3:07. You know what that means now.' },
+    { who: 'narr', text: 'Vera Lune sings her last song tonight. The matchbook says 3:07 — in a child\'s handwriting. "I KEEP THE DOOR."' },
   ],
   calloway: [
     { who: 'calloway', text: 'Jack Calloway, Raincaster PD. You\'re dressed like a Martian, pal.' },
     { who: 'calloway', text: 'Did you read the papers in July? Flying saucer in Roswell. Army says it was a weather balloon.', choices: [
       { t: '"A weather balloon. Sure."', do: ['xp:15'] },
       { t: '"That gets argued about for the next eighty years."', do: ['blend:-1'], say: ['calloway', '...Eighty years. Okay, Nostradamus.'] }] },
-    { who: 'calloway', text: 'I\'m watching the Orchid. Vinnie Moretti runs card games in the back. And a man named Hart has been sending the singer flowers. Strange flowers. Clock-faced orchids.', do: ['flag:calloway1'] },
+    { who: 'calloway', text: 'I\'m watching the Orchid. Vinnie Moretti runs card games in the back. And somebody\'s been leaving the singer flowers. Clock-faced orchids. The shoeshine kid delivers them.', do: ['flag:calloway1'] },
   ],
   barkeep: [
     { who: 'barkeep', text: 'What\'ll it be? Biggest news in baseball this year — name it and the first one\'s on me.', choices: [
@@ -654,13 +714,13 @@ TM.DLG = {
     { who: 'barkeep', text: 'A pilot came in last week, swore nobody\'ll ever fly faster than sound. What do you think?', choices: [
       { t: '"Maybe someday."', do: ['xp:20'] },
       { t: '"Chuck Yeager already did it."', do: ['blend:-1'], say: ['barkeep', 'Yeager? Never heard of him. You a spy or something?'] }] },
-    { who: 'barkeep', text: 'Vera goes on at eleven. Vinnie\'s at the bar. Mr. Hart\'s in his booth — he always sits in the dark.', do: ['flag:barkeep', 'flag:vera_alive'] },
+    { who: 'barkeep', text: 'Vera goes on at eleven. Vinnie\'s at the bar. Little Si shines shoes out back — sweet kid. Mama\'s sick.', do: ['flag:barkeep', 'flag:vera_alive'] },
   ],
   vera: [
     { who: 'vera', text: 'You\'re the first person tonight who looked at my face and not my dress.' },
-    { who: 'vera', text: 'Mr. Hart bought me this gown. He says I sing like a door opening. He wants me to meet him backstage after the last set. At three.' },
+    { who: 'vera', text: 'There\'s a little girl who comes to every show. Hood up, never takes it off. She asks for one song — seven notes, no words. She asked me to sing it backstage after the last set. At three.' },
     { who: 'narr', text: 'You can\'t warn her. You try anyway. The words come out wrong, like the night won\'t let them through.' },
-    { who: 'vera', text: 'Sweet of you. Don\'t worry about me. I\'ve handled worse than an old man with a cane.', do: ['flag:vera_talked'] },
+    { who: 'vera', text: 'Sweet of you. Don\'t worry about me, sugar. I\'ve handled worse than a kid in a hood.', do: ['flag:vera_talked'] },
   ],
   vinnie: [
     { who: 'vinnie', text: 'You\'re in my club. Buy a drink or get lost.', if: { nclue: 'vinnie_said' } },
@@ -670,21 +730,23 @@ TM.DLG = {
   ],
   vinnie_ok: [
     { who: 'vinnie', text: '...Alright, alright. Cops pinched my card game at half past eleven. I spent the night in a cell. Happy?', do: ['flag:vinnie_broke'] },
-    { who: 'vinnie', text: 'And that Hart guy? He paid me cash to keep the back door unlocked. I figured it was romance. Old guy, young singer.' },
+    { who: 'vinnie', text: 'And the shoeshine kid? Si? He asked me for the back door key. Said a little girl wanted to hear Vera sing up close. I figured, what\'s the harm.' },
   ],
   hart: [
-    { who: 'silas47', text: 'Sit, if you like. I\'m only waiting for a song.' },
-    { who: 'narr', text: 'The same face. Not his son. Not his grandson. Him. Thirty-nine years younger than he\'ll look in 1986 — and exactly the same.', do: ['clue:hart'] },
-    { who: 'silas47', text: 'You look at me like you\'ve met me. People often do. I have one of those faces.' },
-    { who: 'narr', text: 'He hums seven notes, stands, and walks toward the back door. It\'s 2:58 AM.', do: ['flag:hart_left', 'flag:vera_dead'] },
+    { who: 'silaskid', text: 'Shine, mister? Nickel. I\'m Si. ...Your shoes are weird.' },
+    { who: 'narr', text: 'Twelve years old. Burgundy scarf. A gold watch chain far too nice for a shoeshine boy. He hums seven notes while he works.', do: ['clue:hart'] },
+    { who: 'silaskid', text: 'My mama\'s real sick. But a friend of mine says she can get her more time. Lots more. I just gotta keep a door for her.' },
+    { who: 'narr', text: 'At 2:58 AM, Si packs up his kit, looks at the back door, and swallows hard. Then he goes to hold it open.' },
+    { who: 'narr', cut: 'orchid307', text: 'You run for the dressing room. You already know you\'re too late. It already happened.', do: ['flag:hart_left', 'flag:vera_dead'] },
   ],
   outro3: [
-    { who: 'card', text: 'Dawn closes the Hour.\nIn your hand: a brass gear.\nHARTWELL CLOCKWORKS · MARCH 12, 1888.' },
+    { who: 'card', text: 'Dawn closes the door.\nIn your hand: a brass gear somebody left for you.\nHARTWELL CLOCKWORKS · MARCH 12, 1888.' },
     { who: 'mina', text: 'That\'s the oldest one. If he started there, that\'s where the first door is.' },
     { who: 'mina', text: '...My hands are shaking. Going that far will hurt. Hold the gear tight, okay?' },
   ],
 
   intro4: [
+    { who: 'card', text: 'THE STORY SO FAR\n\nSi, a shoeshine boy, held the door for a hooded girl. Vera died.\nSi grew up to be Eli Ward.\nThe getaway car left you a gear: Hartwell Clockworks, 1888. The oldest door.' },
     { who: 'card', text: 'MARCH 12, 1888 · 11:20 PM\nTHE GREAT BLIZZARD' },
     { who: 'narr', text: 'Snow to your knees. Gas lamps. No phones in pockets — no pockets you\'d recognize. Blend in, or the constable will take you in for vagrancy.' },
   ],
@@ -701,46 +763,49 @@ TM.DLG = {
       { t: '"Nothing much, ma\'am."', do: ['xp:20'] },
       { t: '"Just Jack the Ripper."', do: ['blend:-1'], say: ['agnes', 'Jack the... who? What a horrid name. You frighten me.'] }] },
     { who: 'agnes', text: 'The young master is dying. Consumption. Mr. Hartwell says he\'s building something to "give him more time". He talks to the great clock like it\'s a person.' },
-    { who: 'agnes', text: 'And last week — I swear on my mother — I saw HIM in the snow at midnight. Mr. Hartwell. Only older. Holding a little boy\'s hand. Then nothing. Footprints that just... stopped.', do: ['flag:agnes', 'clue:agnes_saw'] },
+    { who: 'agnes', text: 'And Miss Wren — Bernard\'s twin — sneaks up the tower every night, humming the clock\'s tune. She says wherever Bernard goes, she goes. She made her father promise.', do: ['flag:agnes', 'clue:agnes_saw'] },
   ],
   bernboy: [
     { who: 'bernboy', text: '*cough* ...Are you a doctor? Father says a new doctor is coming. A doctor from far away.' },
-    { who: 'bernboy', text: 'Father says I\'m going to wait in a room where time stops, until there\'s medicine. He says it won\'t hurt. He says he\'ll come get me.' },
-    { who: 'bernboy', text: 'Will you tell him I\'m not scared? I\'m a little scared.', do: ['clue:bernard_boy'] },
+    { who: 'bernboy', text: 'Father says I\'m going to wait in a room where time stops, until there\'s medicine. He says it won\'t hurt. Wren says she\'s coming with me. She always does.' },
+    { who: 'bernboy', text: 'Will you tell her I\'m not scared? I\'m a little scared.', do: ['clue:bernard_boy'] },
   ],
   elias: [
     { who: 'silas88', text: 'You\'ve come for the boy? No. You\'re not the doctor. You have the look of someone who\'s been somewhere they shouldn\'t.' },
     { who: 'silas88', text: 'I have found a space between the seconds, stranger. A room where nothing grows older. I will put my son in it, and when the world has a cure, I will bring him out.' },
-    { who: 'silas88', text: 'At seven minutes past three, the great clock will open it. And nobody — nobody — will stop me.', do: ['flag:elias'] },
+    { who: 'silas88', text: 'My daughter wants to go with him. She can\'t. ...She doesn\'t listen. At seven minutes past three, the great clock opens.', do: ['flag:elias'] },
   ],
   foreman: [
     { who: 'foreman', text: 'Pike. Foreman. You\'re not one of mine. Doesn\'t matter — nobody\'s working, we\'re snowed in.' },
     { who: 'foreman', text: 'The old man\'s had me take the escapement apart three times. Says the clock must strike EXACTLY right. There\'s a wall in his workshop he won\'t let anyone near.', do: ['flag:foreman'] },
   ],
   first_door: [
-    { who: 'narr', text: 'Three o\'clock. The great clock shudders. Seven notes ring out over the snow — the Hartwell Chime.' },
-    { who: 'narr', text: 'Elias carries his son into a circle of light in the middle of the tower. The boy waves at you.' },
+    { who: 'narr', cut: 'first_door', text: 'Three o\'clock. The great clock shudders. Seven notes ring out over the snow — the Hartwell Chime.' },
+    { who: 'narr', text: 'Elias carries his son into the circle of light. A small girl in a hood breaks from the stairs and runs in after them. "WREN — NO!"' },
     { who: 'narr', text: 'The circle closes. Silence. Then something on the other side begins to *knock*.' },
-    { who: 'narr', text: 'Elias screams the boy\'s name. The light opens again, a little, and what reaches out of it is too tall and has too many hands — and it is wearing Bernard\'s face in its chest.' },
-    { who: 'narr', text: 'It touches Elias\'s left palm. He stops aging that night. And he starts counting.', do: ['flag:first_door'] },
+    { who: 'narr', text: 'The light tears open a little. What reaches out is too tall, with too many hands, wearing Bernard\'s face in its chest. Then the girl walks out under its arm.' },
+    { who: 'narr', text: 'Where Wren\'s eyes were, there\'s a band of cyan light. She turns that light on you. And you know her. *Mina.*', do: ['flag:first_door', 'clue:wren_out'] },
+    { who: 'mina', text: '...Oh. It\'s you. It was always going to be you. Take the spring, stranger. The records say you did.' },
   ],
   outro4: [
-    { who: 'card', text: 'You come back to 2026 holding the mainspring of the great clock.\n\nThe Historical Society is empty.\nMina is gone.' },
-    { who: 'narr', text: 'On Silas\'s desk: a single pocket watch, stopped at 3:07, engraved with one letter. M.' },
+    { who: 'card', cut: 'stolen_spring', text: 'You come back through the door with the mainspring of the great clock in your hands.' },
+    { who: 'mina', text: 'Thank you. I\'ve waited a hundred and thirty-eight years for you two.' },
+    { who: 'narr', text: 'She takes the mainspring out of your hands like it\'s a gift. Silas is in the doorway with his car keys. Your partner is on the floor, out cold.' },
+    { who: 'mina', text: 'Don\'t follow us. You\'ve done enough. You did exactly enough.' },
   ],
-
   intro5: [
+    { who: 'card', text: 'THE STORY SO FAR\n\nIn 1888, Wren Hartwell followed her dying twin into the Hour — and came out as Mina.\nShe needed you to steal the mainspring. You did.\nNow she and Silas have it. 3:07 is coming.' },
     { who: 'card', text: 'NOVEMBER 7, 2026 · 2:31 AM\nTHE TOWER COMES DOWN AT DAWN' },
-    { who: 'narr', text: 'Thirty-six minutes until 3:07.' },
+    { who: 'narr', text: 'Thirty-six minutes until 3:07. The Chronomancer has the spring. With it, the great clock can open the biggest door she\'s ever made.' },
   ],
   partner5: [
-    { who: 'PARTNER', text: { a: 'He took her while you were gone. He was so nice to her. He made her tea. I was right there.', j: 'He took her. He walked out with her like a grandpa taking a kid to the park. I was holding the gear. I couldn\'t leave it.' } },
-    { who: 'player', text: 'It\'s him. It was always him. Let\'s prove it — and get her back.', do: ['flag:partner5'] },
+    { who: 'PARTNER', text: { a: 'She was so small. She just walked past me and Silas hit me with the cane. She didn\'t even look back.', j: 'Silas swung that cane like a twenty-year-old. The kid took the spring and said "thank you". THANK YOU.' } },
+    { who: 'player', text: 'She\'s Wren Hartwell. She\'s been twelve since 1888. Let\'s prove it — and stop her before 3:07.', do: ['flag:partner5'] },
   ],
   marquis5: [
-    { who: 'marquis', text: 'Word is the Collector is the old archivist. The guy who\'s been buying our watches. And word is you\'re a cop, J.' },
+    { who: 'marquis', text: 'Word is the Collector is the old archivist. The guy buying our watches. And word is you\'re a cop, J.' },
     { who: 'marquis', text: 'So which is it?', choices: [
-      { t: '"I\'m a cop. And the man buying your watches has been killing kids since 1888. I need the crew."', do: ['xp:40'] },
+      { t: '"I\'m a cop. And those watches you sold him were keys. A kid\'s been using them to kill people since 1888. I need the crew."', do: ['xp:40'] },
       { t: '"I\'m Mantis. Always."', say: ['marquis', 'Don\'t. Lie. To me. Not tonight.'] }] },
     { who: 'marquis', text: '...Four years at my table. You eat with us. You laugh with us.' },
     { who: 'marquis', text: 'Fine. Tonight the Mantis crew hunts the Collector. Tomorrow we talk about what you are. Whistle and we come.', do: ['flag:marquis5', 'flag:crew_ready'] },
@@ -748,24 +813,35 @@ TM.DLG = {
   ruth: [
     { who: 'ruth', text: 'They said they found my Ivy. Forty years I left the porch light on. Forty years.' },
     { who: 'ruth', text: 'They said she was still sixteen. How can that be? How can my baby still be sixteen?' },
-    { who: 'player', text: 'Someone took her out of her time. I saw her, Mrs. Calder. She was brave. She was funny. She wasn\'t scared of the thing she drew. She felt sorry for it.' },
-    { who: 'ruth', text: 'That sounds like her. ...He\'s at the old Clockworks, across the river. Chief Hale closed the bridge for the demolition. Take my car. Drive fast.', do: ['flag:ruth'] },
+    { who: 'player', text: 'Someone took her out of her time. I saw her, Mrs. Calder. She was brave. She was funny. She felt sorry for the thing she drew.' },
+    { who: 'ruth', text: 'That sounds like her. ...Silas Morrow\'s big black car just went by toward the Clockworks, with a child in it. Take my car. Drive fast.', do: ['flag:ruth'] },
+  ],
+  arrived: [
+    { who: 'narr', text: 'Silas\'s car spins out against the Clockworks fence. The passenger door is already open. A small hooded figure is climbing the tower stairs with the mainspring under her arm.' },
+    { who: 'narr', text: 'Silas gets out slowly, cane first. He doesn\'t run. He stands between you and the stairs.' },
   ],
   silas_final: [
-    { who: 'silas26', text: 'You came. Of course you came. You always come — I\'ve watched you do it in three different centuries.' },
-    { who: 'silas26', text: 'Do you know what a Chronomancer\'s years are worth? A thousand ordinary lives. One door through her and Bernard comes home. All of him.' },
-    { who: 'player', text: 'That thing isn\'t your son. Your son died in 1888 waving at you.' },
-    { who: 'silas26', text: 'He is my son. He KNOCKS. Every night for 138 years, he knocks. ...It is 3:06.', do: ['flag:silas_fight'] },
+    { who: 'silas26', text: 'You caught up. Of course you did. You always do — she showed me the records when I was twelve.' },
+    { who: 'silas26', text: 'Do you know what she gave me? My mother lived to 1990. Forty-three extra years. Wren keeps her promises.' },
+    { who: 'player', text: 'She paid for them with Vera. With Ivy. With everyone in that ledger.' },
+    { who: 'silas26', text: 'And tonight she pays with all of Raincaster, and her brother comes home. I hold the door. That\'s all I\'ve ever done. ...It\'s 3:05.', do: ['flag:silas_fight'] },
   ],
   silas_end: [
-    { who: 'narr', text: 'The mainspring in your pocket hums. The tower clock lurches. Silas\'s stolen years tear loose from him all at once.' },
-    { who: 'silas26', text: 'No — not yet — he\'s almost through —' },
-    { who: 'narr', text: 'One hundred and eighty years land on him in a single breath. Where he stood, there\'s a scarf, a cane, and a little gray dust on the floorboards.' },
-    { who: 'narr', text: 'Behind you, the door he opened is still open. Mina is on the other side.', do: ['flag:silas_beaten'] },
+    { who: 'narr', text: 'Silas goes down hard. The borrowed years she lent him slide off him like a coat — and he\'s just ninety-one again, gasping on the floorboards.' },
+    { who: 'silas26', text: 'She\'s... through there. Don\'t hurt her. She was only ever twelve.' },
+    { who: 'narr', text: 'Behind him, a door of light hangs in the tower, the great clock grinding around it.', do: ['flag:silas_beaten'] },
   ],
-  mina_bound: [
-    { who: 'mina', text: 'You came! He tied me to the minute hand — it doesn\'t make sense in here, nothing does —' },
-    { who: 'narr', text: 'You cut her loose. Then the stars behind her move. Something very tall stands up out of the dark, and it has a face in its chest, and the face is crying.', do: ['flag:mina_freed'] },
+  wren_final: [
+    { who: 'narr', cut: 'between', text: 'Stars, all the way down. The great clock\'s face floats in the dark like a moon.' },
+    { who: 'wren', text: 'You came all this way. Through four centuries. For people you never met.' },
+    { who: 'wren', text: 'He\'s right there. Can you hear him knocking? One more door — the whole town at once — and Bernard comes home. ALL of him.' },
+    { who: 'player', text: 'Wren. That thing isn\'t your brother. Your brother waved goodbye in 1888.' },
+    { who: 'wren', text: 'He waved at ME. ...It\'s 3:07.', do: ['flag:wren_fight'] },
+  ],
+  wren_end: [
+    { who: 'narr', text: 'The dials on Wren\'s wrists crack. The band of light over her eyes flickers — and for a second there are just a girl\'s eyes under it. Gray. Tired.' },
+    { who: 'wren', text: 'I\'m so tired. A hundred and thirty-eight years tired.' },
+    { who: 'narr', text: 'Behind her, the stars move. Something very tall stands up out of the dark with a face in its chest, and the face is crying.', do: ['flag:wren_beaten'] },
   ],
   bernard_end: [
     { who: 'narr', text: 'Bernard stops. The hands fold. The face in its chest looks at you — and for one second it\'s just a boy.' },
@@ -773,18 +849,21 @@ TM.DLG = {
     { who: 'narr', text: 'The mainspring is in your hand. You can stop the great clock forever and let him rest — or wind it, and open the door all the way.', choices: [{ t: 'LET HIM REST. Stop the clock.', go: 'end_rest' }, { t: 'BRING HIM HOME. Wind it.', go: 'end_home' }] },
   ],
   end_rest: [
-    { who: 'player', text: 'He\'s not coming, Bernard. He tried. He tried too hard. You can stop waiting now.' },
-    { who: 'narr', text: 'You break the mainspring. The stars go out one by one. The boy waves. This time, nothing knocks.', do: ['flag:rested', 'ach:rest'] },
+    { who: 'player', text: 'He\'s not coming back, Wren. Neither of you have to wait anymore.' },
+    { who: 'narr', cut: 'end_rest', text: 'You break the mainspring. The stars go out one by one. Wren takes her brother\'s hand — just a boy\'s hand now — and two children walk into the light, waving.', do: ['flag:rested', 'ach:rest'] },
   ],
   end_home: [
-    { who: 'narr', text: 'You wind the spring. The door opens wide. Bernard steps through into 2026 — all of him — and looks around a world he doesn\'t understand.', do: ['flag:home', 'ach:home'] },
-    { who: 'narr', text: 'Mina grabs your arm. "We have to close it. We have to close it NOW." You do. Barely. Somewhere in Raincaster, something very tall is hiding.' },
+    { who: 'narr', text: 'You wind the spring. The door opens wide. Bernard steps through into 2026 — all of him — with his sister holding his hand.', do: ['flag:home', 'ach:home'] },
+    { who: 'narr', text: 'Your partner grabs your arm. "Close it. NOW." You do. Barely. Somewhere in Raincaster, a girl with light for eyes is walking her very tall brother home.' },
   ],
   intro6: [{ who: 'card', text: 'NOVEMBER 7, 2026 · 6:51 AM\nDAWN' }, { who: 'narr', text: 'The tower comes down at seven. For the first time in forty-one days, it isn\'t raining.' }],
   ruth6: [{ who: 'ruth', text: 'I don\'t understand any of it. But I understand this.' }, { who: 'narr', text: 'She holds up Ivy\'s last drawing. A tall, sad shape with antlers — and a little boy, waving, walking away from it into the light.' }, { who: 'ruth', text: 'Thank you for bringing her home.', do: ['flag:ruth6'] }],
-  mina6: [{ who: 'mina', text: 'The Children will come looking for me. They always do.' }, { who: 'player', text: { a: 'Then they\'ll find me. And two very angry boxes.', j: 'Then they\'ll find me. And about thirty very confused gangsters.' } }, { who: 'mina', text: '...Can I take the mask off now? I don\'t know what I look like anymore.', do: ['flag:mina6'] }],
+  mina6: [
+    { who: 'marquis', text: { a: 'So the old man\'s watches were keys to dead people. And J\'s a cop. Long night.', j: 'Four years, J. Four years.' } },
+    { who: 'marquis', text: { a: 'Tell him he\'s got till Monday.', j: '...You came back for the town. Not the badge. I\'ll think about that. You got till Monday.' }, do: ['flag:mina6'] },
+  ],
   partner6: [
-    { who: 'PARTNER', text: { a: 'Marquis gave me till Monday to explain myself. Seung already wants to see the mainspring. And Hale wants to know who blew up his crime scene.', j: 'Golem II made Mina a waffle. Out of what, I don\'t want to know.' } },
+    { who: 'PARTNER', text: { a: 'Marquis gave me till Monday to explain myself. Seung already wants to see the mainspring. And Hale wants to know who wrecked his crime scene.', j: 'Silas asked for you. From the hospital. He said to say thank you. He didn\'t say for what.' } },
     { who: 'card', text: 'The tower falls at 7:00 AM exactly.\n\nIn the rubble, a construction worker finds a pocket watch.\nIt is stopped at 3:07.\nThe engraving says: CASE 02.', do: ['flag:case_done'] },
   ],
 };
@@ -799,7 +878,8 @@ TM.FIGHTS = {
   f_law47: { foe: 'goon', tip: 'You blew your cover in 1947. The doorman doesn\'t like you.' },
   f_law88: { foe: 'constable', tip: 'You blew your cover in 1888. The constable is taking you in.' },
   f_blown: { foe: 'mantis', tip: 'YOUR COVER IS BLOWN! The Mantis crew knows you\'re a cop.' },
-  f_silas: { foe: 'silas', boss: true, end: 'silas_end' },
+  f_silas: { foe: 'silas', boss: true, end: 'silas_end', tip: 'Silas fights on borrowed years. When he checks his watch, he REWINDS — hit him hard before and after.' },
+  f_wren: { foe: 'wren', boss: true, end: 'wren_end', tip: 'The Chronomancer skips through time: she blinks behind you, rewinds once, and her circle-trace is a killing blow. DODGE THE CIRCLE.' },
   f_bernard: { foe: 'bernard', boss: true, end: 'bernard_end' },
 };
 
@@ -807,12 +887,14 @@ TM.FIGHTS = {
 TM.FILES = {
   augie: ['AUGIE', 'Escaped the Children of Zyxth at nine. Engineer. Builds from scrap. Carries the Hush Crook Mk III — a 186 cm rifle-built staff that takes eight heads — and two box-droids, Golem I and II.'],
   jester: ['JESTER', 'Former Baltimore detective, four years undercover in the Mantis crew. Keeps a jester mask from his old life — blue, red and yellow. When he puts it on, he stops thinking.'],
-  mina: ['MINA', 'Thirteen. The youngest Chronomancer. Ran from the Children the night Ivy died. Two clock gauntlets: the bezel tells world time, the black hands tell field time.'],
+  mina: ['MINA', 'Says she\'s twelve and a runaway. Opens doors in time with two brass wrist dials. A band of cyan light where her eyes should be. Hums the Hartwell Chime.'],
+  wren: ['WREN HARTWELL', 'Bernard\'s twin, born 1876. Followed him into the Hour Between on March 12, 1888. Came out unable to age, able to open doors through time — and through people. Has called herself many names. Lately: Mina.'],
   rules: ['THE RULES OF TIME', 'TETHER: you go where an object from that moment takes you. FIXED: the past already happened, with you in it. ANCHOR: someone holds the tether in the present. DAWN: the door closes at sunrise.'],
   ivy: ['IVY CALDER', '16. Artist. Vanished October 31, 1986. Found November 6, 2026 — still sixteen. She could see Bernard. She felt sorry for him.'],
   vera: ['VERA LUNE', 'Singer at the Black Orchid. Died October 24, 1947, backstage, 3:07 AM. The police called it "an unusual wound".'],
-  silas: ['SILAS MORROW', 'Archivist. Born Elias Hartwell, 1843. Master clockmaker. Has not aged since March 12, 1888.'],
-  bernard: ['BERNARD', 'Bernard Hartwell, 12, dying of consumption, carried into the Hour Between in 1888. Something came back wearing his face.'],
+  silas: ['SILAS MORROW', 'Archivist, 91. As a boy, "Si" shined shoes at the Black Orchid and held the back door for a girl who promised his mother more time. As "Eli Ward" he drove Ivy Calder to the quarry. Buys 3:07 watches through the Mantis crew: keys to her doors.'],
+  elias: ['ELIAS HARTWELL', 'Master clockmaker, 1888. Built the great clock to hide his dying son between the seconds. Lost both his children to it in one minute.'],
+  bernard: ['BERNARD', 'Bernard Hartwell, 12, dying of consumption, carried into the Hour Between in 1888. Something came back wearing his face. His sister has been feeding it lives ever since.'],
   zyxth: ['THE CHILDREN OF ZYXTH', 'A cult of masked technomancers. Masks turn the skin light blue. Every member carries an OmniBox — a living computer — on their back.'],
   golems: ['GOLEM I & II', 'Two 16 kg box-droids on treads. Modes: drone, battle, fortress, camouflage, medic, detective, and self-destruct (Augie\'s code only).'],
   mask: ['THE JESTER MASK', 'Blue and red horns, gold bells, a white face. Jester\'s mother made it for a Mardi Gras parade. He hasn\'t said what happened the last time he wore it.'],
@@ -836,7 +918,8 @@ TM.FEATS = {
   allstars: ['Gold Badge', 'Get 3 stars on every chapter.', 300],
   glyphs: ['Lost Seconds', 'Find every lost second (◆) in a chapter.', 40],
   noko: ['Still Standing', 'Finish a chapter without getting knocked out.', 40],
-  silas: ['Time\'s Up', 'Defeat Silas.', 150],
+  silas: ['Door Closed', 'Get past Silas.', 120],
+  wren: ['Time\'s Up', 'Defeat the Chronomancer.', 200],
   boss: ['Wrong Body', 'Face Bernard.', 200],
   rest: ['Let Him Rest', 'Stop the clock.', 30],
   home: ['Bring Him Home', 'Wind the clock.', 30],
@@ -878,10 +961,12 @@ TM.MINDS = {
     lines: { greet: 'Keep your voice down.', victim: 'Teenage girl. No ID. Died tonight. And her clothes look forty years old.', wound: 'Seven centimeters. Perfect circle. Edges like melted glass. Nothing makes that.', chief: 'The Chief wants it closed by morning.', fallback: ['I just work the lab.', 'Be careful. Please.'] } },
   hale: { name: 'Chief Hale', who: 'Smug, lazy police chief who wants the case gone.', knows: 'Very little.', hides: 'He\'s embarrassed he can\'t explain the body.',
     lines: { greet: 'This is a closed scene.', victim: 'Runaway. Tragic. Done.', fallback: ['Go home.', 'Raincaster doesn\'t need ghost stories.'] } },
-  mina: { name: 'Mina', who: '13-year-old Chronomancer who ran away from the Children of Zyxth cult. Brave, scared, smart, says the rules of time exactly.', knows: 'The four rules of time; she felt an Hour open at 3:07; she can only open Hours using a tether object.', hides: 'She doesn\'t know what she looks like without her mask.',
-    lines: { greet: 'Hi. Sorry. I\'m jumpy.', time: 'Tether, fixed, anchor, dawn. Those are the rules. They don\'t bend.', victim: 'She came through at 3:07. She was already hurt.', cult: 'The Children. Masks. Boxes on our backs. I don\'t want to go back.', fallback: ['I can only go where I\'m holding a piece of.', 'Whatever happened back there already happened.'] } },
-  silas: { name: 'Silas Morrow', who: 'Kind, old-fashioned archivist with a cane and a glove on his left hand. Secretly Elias Hartwell, the 180-year-old killer.', knows: 'Everything about Raincaster history.', hides: 'That he is the killer. He deflects warmly and steers toward history.',
-    lines: { greet: 'Come in out of the rain.', time: 'Time is just a very patient river.', victim: 'Poor child. Poor, poor child.', history: 'The tower clock was built in 1888 by Elias Hartwell. Brilliant man. Tragic family.', glove: 'Arthritis. Old hands.', fallback: ['Would you like tea?', 'Raincaster remembers everything, if you know where to look.'] } },
+  mina: { name: 'Mina', who: 'Seems to be a scared 12-year-old runaway who can open doors in time. Secretly Wren Hartwell, 150 years old, the Chronomancer. Calm, polite, a little too precise; never lies outright, only leaves things out.', knows: 'The five rules of time; exactly when every door opened; the heroes will fetch the mainspring because the records say so.', hides: 'That she is the killer, that she opened the door that killed Ivy from the attic, and that Silas works for her. Deflects to the rules and to being scared.',
+    lines: { greet: 'Hi. Sorry. I\'m jumpy.', time: 'Tether, fixed, anchor, dawn — and you come back to whoever opened the door. They don\'t bend.', victim: 'She came through at seven past eleven. She was already hurt.', cult: 'People want what I can do. That\'s all you need to know.', bernard: 'Bernard? ...That\'s a sad name. Why do you ask?', fallback: ['I can only go where I\'m holding a piece of.', 'Whatever happened back there already happened.', 'You\'ll understand when you get to the oldest door.'] } },
+  silas: { name: 'Silas Morrow', who: 'Kind, old-fashioned 91-year-old archivist with a cane and a glove on his left hand. Secretly the Chronomancer\'s accomplice since he was 12; he buys 3:07 watches as door keys.', knows: 'Everything about Raincaster history.', hides: 'That he works for Mina/Wren, that he was Si (1947) and Eli Ward (1986). Deflects warmly and steers toward history.',
+    lines: { greet: 'Come in out of the rain.', time: 'Time is just a very patient river.', victim: 'Poor child. Poor, poor child.', history: 'The tower clock was built in 1888 by Elias Hartwell. He had twins, you know. Tragic family.', glove: 'Arthritis. Old hands.', watch: 'I collect a little. Every old watch is a door to somewhere.', fallback: ['Would you like tea?', 'Raincaster remembers everything, if you know where to look.'] } },
+  hart: { name: 'Si', who: '12-year-old shoeshine boy in 1947. Polite, nervous, loves his sick mother.', knows: 'A girl in a hood promised his mama more time if he keeps the back door.', hides: 'That the girl asked him to unlock the back door at three.',
+    lines: { greet: 'Shine, mister?', victim: 'Miss Vera\'s real nice to me.', fallback: ['Mama\'s sick.', 'I just keep the door. That\'s all.'] } },
   danny: { name: 'Danny', who: '13-year-old in 1986, one of the Static Kids. Talks fast about baseball and arcade games.', knows: 'Ivy says something follows her; the Mets won the World Series.', hides: 'Nothing.',
     lines: { greet: 'Whoa, cool jacket.', victim: 'Ivy? She\'s the best artist in school.', fallback: ['Wanna play Galaga later?', 'Ivy\'s out at the farm.'] } },
   ivy: { name: 'Ivy Calder', who: '16-year-old artist in 1986. Funny, a little sad, sees Bernard and feels sorry for him.', knows: 'Bernard says he\'s lost; Mr. Ward gives her free tokens.', hides: 'Her stepdad drinks.',
@@ -898,8 +983,8 @@ TM.MINDS = {
     lines: { greet: 'Buy a drink or get lost.', fallback: ['I was right here.', 'Mind your business.'] } },
   agnes: { name: 'Agnes', who: '1888 housemaid, kind, superstitious.', knows: 'Bernard is dying; she saw an older Elias appear in the snow with a boy.', hides: 'Nothing.',
     lines: { greet: 'Oh! You startled me.', fallback: ['The young master is so ill.', 'Mr. Hartwell talks to the clock.'] } },
-  elias: { name: 'Elias Hartwell', who: '1888 master clockmaker, desperate father, brilliant and cold.', knows: 'He has found a room between seconds.', hides: 'He is afraid it won\'t work.',
-    lines: { greet: 'You\'re not the doctor.', fallback: ['At seven past three, the clock will open it.', 'Nobody will stop me.'] } },
+  elias: { name: 'Elias Hartwell', who: '1888 master clockmaker, desperate father of twins Bernard and Wren, brilliant and cold.', knows: 'He has found a room between seconds.', hides: 'He is afraid it won\'t work, and afraid Wren will follow her brother.',
+    lines: { greet: 'You\'re not the doctor.', fallback: ['At seven past three, the clock will open it.', 'Wren must stay out of the tower.'] } },
   ruth: { name: 'Ruth Calder', who: 'Ivy\'s mother, 70s, in 2026. Grieving, gentle, stubborn.', knows: 'Her husband worked the tower clock.', hides: 'Nothing.',
     lines: { greet: 'They found my Ivy.', fallback: ['Forty years I left the light on.', 'Go get him.'] } },
 };

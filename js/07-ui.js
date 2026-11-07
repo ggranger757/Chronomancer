@@ -8,7 +8,7 @@
 TM.UI = (() => {
   const U = TM.U, $ = (s) => document.querySelector(s);
   const UI = {}; let modal = false, screen = false, dlg = null, battleOn = false, chaseOn = false;
-  UI.blocking = () => modal || screen || !!dlg || battleOn || chaseOn;
+  UI.blocking = () => modal || screen || !!dlg || battleOn || chaseOn || (TM.Cut && TM.Cut.active());
   UI.modalOpen = () => modal;
   UI.chaseOn = (on) => { chaseOn = on; document.body.classList.toggle('chasing', on); };
 
@@ -81,15 +81,19 @@ TM.UI = (() => {
     if (i >= L.length) { const r = dlg.stack.pop(); if (r) { dlg.list = r.list; return next(r.i); } return finish(); }
     const n = L[i]; dlg.i = i; dlg.node = n;
     if (n.go) { dlg.stack.push({ list: L, i: i + 1 }); dlg.list = TM.DLG[n.go]; return next(0); }
+    if (n.cut && TM.Cut) {
+      const me = dlg; $('#dialog').className = 'dialog'; $('#dialog').innerHTML = '';
+      return TM.Cut.play(n.cut, () => { if (dlg !== me) return; $('#dialog').className = 'dialog on'; doActs(n.do); if (n.text) show(n); else next(i + 1); });
+    }
     doActs(n.do); show(n);
   }
   function who(n) { const run = TM.S.run; if (n.who === 'player') return run.hero; if (n.who === 'PARTNER') return run.hero === 'augie' ? 'jester' : 'augie'; return n.who; }
   function show(n) {
     dlg.node = n;
-    const box = $('#dialog'), run = TM.S.run, w = who(n); let text = n.text; if (text && typeof text === 'object') text = run.hero === 'augie' ? text.a : text.j;
+    const box = $('#dialog'), run = TM.S.run; let w = who(n); let text = n.text; if (text && typeof text === 'object') text = run.hero === 'augie' ? text.a : text.j;
     const card = w === 'card', narr = w === 'narr';
     box.className = 'dialog on' + (card ? ' card' : '') + (narr ? ' narr' : '');
-    const name = TM.WHO[w] || (TM.HEROES[w] && TM.HEROES[w].name) || '';
+    const name = TM.WHO[w] || (TM.HEROES[w] && TM.HEROES[w].name) || ''; w = (TM.WHOSPR || {})[w] || w;
     const tell = n.tell && run.hero === 'jester' ? `<div class="tell">👁 STREET SENSE: ${U.esc(n.tell)}</div>` : '';
     box.innerHTML = card ? `<div class="cardtxt">${U.fmt(text)}</div><div class="tap">TAP TO CONTINUE</div>` :
       `<div class="dbox">${!narr && TM.SPR[w] ? `<img class="port" data-port="${w}" src="${portrait(w)}">` : ''}<div class="dm">${name ? `<div class="who">${name}</div>` : ''}<div class="dt"></div>${tell}<div class="ch"></div></div><div class="tap">▼</div></div>`;

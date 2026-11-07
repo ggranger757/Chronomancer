@@ -1,5 +1,12 @@
 # DEVLOG
 
+## v4.0 — The Chronomancer is the villain
+- **Story:** "Mina" is Wren Hartwell, Bernard's twin, who came out of the Hour in 1888 unable to age. Silas Morrow is her accomplice: Si the shoeshine boy (1947), Eli Ward (1986), the watch-buying "Collector" (2026). Fair-play clue in chapter 1 (rule 5: a body lands at the opener's end). Hidden rule 6 (one self per minute) explains why she needed the heroes to steal the mainspring. Chapter 5: Silas fight, then the Chronomancer boss (blinks, rewinds, circle-trace), then Bernard. "Story so far" cards open chapters 2–5.
+- **Cutscenes** (`js/06e-cut.js`, data in `js/02b-cuts.js`): eight letterboxed scenes built from the game's own backgrounds and sprites, with portals, clock faces, flashes and weather.
+- **Chases are data** (`TM.CHASES`): pursuit mode (catch a target car), era backgrounds, era filters, period cars, falling leaves. Three story chases.
+- **Sprites:** Chronomancer from SHADOW's Blind Huntress (cyan light where her eyes were), Nanomancer from Shadeflit, Calloway carries a pistol, Jester's shotgun sits in his hands.
+- **UI:** Step Quest skin. Notched pixel boxes, bevelled buttons, Silkscreen labels, Courier reading text, smaller type, every label fits its button.
+
 ## v2.1: simplified for players, Step Quest style
 - Switched from a top-down game with many systems to a **side-view** game with one ACTION button, one objective at a time, and a guidance arrow.
 - Removed all code-based content: no casting-code puzzles and no code in the daily challenge.

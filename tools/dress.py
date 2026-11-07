@@ -459,6 +459,7 @@ CAST = {
     'crew2': dict(sex='m', scale=1.27, wide=1.05, mat=M('tan', '#26272e', '#26272e', None, '#252a36', '#141418'), hair='#0e0a08', hairstyle='slick', **GANG),
     'crew3': dict(sex='m', scale=1.22, mat=M('pale', '#26272e', '#26272e', None, '#252a36', '#141418'), hair='#e8e4dc', hairstyle='short', **GANG),
     # ---- the killer, in every era. Same burgundy scarf, same gold chain, same cane.
+    'silaskid': dict(sex='s', scale=1.3, mat=M('fair', '#bab4a8', '#bab4a8', None, '#3a2e24', '#1a1210'), hair='#6a4a2a', hairstyle='short', scarf='#7a1a2e', suspenders='#3a2a20', hat='flatcap', hatcol='#3a3a40'),
     'silas26': dict(sex='m', scale=1.27, mat=M('fair', '#3e4048', '#3e4048', None, '#2c2d33', '#1a1414'), hair='#b8b8c0', hairstyle='gray', beard='#a8a8b0', scarf='#7a1a2e', chain=1, skirt=('#3e4048', 6, 1, 'split'), prop='cane'),
     'silas86': dict(sex='m', scale=1.27, mat=M('fair', '#6a5036', '#6a5036', None, '#3a3020', '#2a1a10'), hair='#b8b8c0', hairstyle='gray', beard='#a8a8b0', scarf='#7a1a2e', chain=1, hat='flatcap', hatcol='#5a4a34', prop='cane'),
     'silas47': dict(sex='m', scale=1.27, mat=M('fair', '#4a4e58', '#4a4e58', None, '#30333a', '#141418'), hair='#b8b8c0', hairstyle='gray', beard='#a8a8b0', scarf='#7a1a2e', chain=1, skirt=('#4a4e58', 10, 2, 'split'), hat='fedora', hatcol='#3a3e46', prop='cane'),
