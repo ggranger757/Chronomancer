@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Chronomancer</title>
+  <meta name="description" content="Chronomancer — a pixel-art mystery that hunts a killer through time. Raincaster, Maryland: 1888 · 1947 · 1986 · 2026.">
+  <meta name="theme-color" content="#0b0b12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Chronomancer">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="stage"><canvas id="game"></canvas></div>
+  <div id="hud">
+    <div class="hudtop">
+      <div class="left"><div id="chap"></div><div id="obj"></div></div>
+      <div class="right">
+        <div id="hp" class="hp"><span>♥</span><div class="bar"><i></i></div><b></b></div>
+        <div id="cover" class="cover" hidden></div>
+        <div id="glyphs" class="glyphs"></div>
+        <div class="hbtns"><button data-ui="file" aria-label="Case file">📁</button><button data-ui="menu" aria-label="Menu">☰</button></div>
+      </div>
+    </div>
+    <div id="acthint" class="acthint"></div>
+  </div>
+  <div id="controls">
+    <div class="dpad"><button data-hold="left" aria-label="Walk left">◀</button><button data-hold="right" aria-label="Walk right">▶</button></div>
+    <button id="act" class="act" data-tap="act" aria-label="Action">·</button>
+  </div>
+  <div id="battle" class="battle"></div>
+  <div id="dialog" class="dialog"></div>
+  <div id="modal" class="modal"></div>
+  <div id="screen" class="screen"></div>
+  <div id="chase" class="chase"></div><div id="tj" class="tj"></div>
+  <div id="toasts"></div><div id="banner" class="banner"></div><div id="xpfeed"></div><div id="fade"></div>
+  <script src="js/00-util.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/01-sprites.js"></script>
+  <script src="js/01-bg.js"></script>
+  <script src="js/02-story.js"></script>
+  <script src="js/03-state.js"></script>
+  <script src="js/05-world.js"></script>
+  <script src="js/06-battle.js"></script>
+  <script src="js/06b-puzzles.js"></script>
+  <script src="js/06c-talk.js"></script>
+  <script src="js/06d-chase.js"></script>
+  <script src="js/07-ui.js"></script>
+  <script src="js/08-main.js"></script>
+</body>
+</html>
